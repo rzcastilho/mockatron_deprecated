@@ -48,5 +48,4 @@ def responder(agent, request):
             context['body'] = json.loads(body)
         else:
             context['body'] = body
-        print(context['body'])
     return HttpResponse(response.template().render(context), status=response.http_code, content_type=agent.content_type)
