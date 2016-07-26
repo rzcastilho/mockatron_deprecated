@@ -7,8 +7,12 @@ from .utils import responder, createDefaultMockResponse
 @csrf_exempt
 def process(request):
     protocol = request.scheme
-    host = request.META["HTTP_HOST"].split(":")[0]
-    port = request.META["SERVER_PORT"]
+    if 'HTTP_MOCKATRON_ORIGINAL_HOST' in request.META:
+        host = request.META["HTTP_MOCKATRON_ORIGINAL_HOST"].split(":")[0]
+        port = request.META["HTTP_MOCKATRON_ORIGINAL_HOST"].split(":")[1]
+    else:
+        host = request.META["HTTP_HOST"].split(":")[0]
+        port = request.META["SERVER_PORT"]
     path = request.path
     headers = list(request.META.keys())
     method = request.method

@@ -1,6 +1,8 @@
 from django.contrib import admin
 
-from .models import Agent, MockResponse
+from .models import *
 
 admin.site.register(Agent)
-admin.site.register(MockResponse)
+admin.site.register(Response)
+admin.site.register(Filter)
+admin.site.register(Condition)
