@@ -6,9 +6,11 @@ from .models import *
 
 @receiver(post_save, sender=Response)
 def invalidate_cache_by_response(sender, **kwargs):
-    cache.delete(kwargs['instance'].agent.hash())
-    for f in kwargs['instance'].agent.filter_set.all():
-        cache.delete(f.hash())
+    if kwargs['instance'].agent != None:
+        cache.delete(kwargs['instance'].agent.hash())
+    if kwargs['instance'].operation != None:
+        cache.delete(kwargs['instance'].operation.hash())
+
 
 @receiver(post_save, sender=Filter)
 def invalidate_cache_by_filter(sender, **kwargs):

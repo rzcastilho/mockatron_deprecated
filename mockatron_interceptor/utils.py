@@ -1,87 +1,100 @@
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.template import Context
-from django.db.models import Q
 
 from .models import *
 from .constants import *
+from .classes import *
 
-import hashlib, json, xmltodict
+from xml.etree import ElementTree
 
-class SimpleMockStrategy:
-    def __init__(self, provider):
-        if isinstance(provider, Agent):
-            self.responses = provider.response_set.filter(Q(enable=True))
-        elif isinstance(provider, Filter):
-            q = Q()
-            for c in provider.response_filters.all():
-                # Field definition
-                if c.field_type == 'LABEL':
-                    field = 'label'
-                elif c.field_type == 'CONTENT':
-                    field = 'content'
-                elif c.field_type == 'HTTP_CODE':
-                    field = 'http_code'
+import hashlib, json, xmltodict, re, urllib.request
 
-                # Operator definition
-                if c.operator == 'EQUALS':
-                    operator = ''
-                elif c.operator == 'CONTAINS':
-                    operator = '__contains'
-                elif c.operator == 'STARTS_WITH':
-                    operator = '__startswith'
-                elif c.operator == 'ENDS_WITH':
-                    operator = '__endswith'
-
-                cond = (field + operator, c.value)
-                q |= Q(cond)
-
-            q &= Q(enable=True)
-            print(q)
-            self.responses = provider.agent.response_set.filter(q)
-        self.next = 0
-        self.max = self.responses.count()
-        self.cache_id = provider.hash()
-
-    def get(self):
-        if self.max == 0:
-            return None
-        response = self.responses[self.next]
-        self.next = self.next + 1
-        if self.next == self.max:
-            self.next = 0
-        cache.set(self.cache_id, self)
-        return response
-
-def createDefaultMockResponse(agent):
-    if agent.content_type == 'text/xml':
-        response = Response(agent=agent, label=XML_DEFAULT_LABEL, content=XML_DEFAULT_RESPONSE)
-    elif agent.content_type == 'application/json':
-        response = Response(agent=agent, label=JSON_DEFAULT_LABEL, content=JSON_DEFAULT_RESPONSE)
+def extract_agent_data_from_request(request):
+    result = {}
+    result['protocol'] = request.scheme
+    if 'HTTP_MOCKATRON_ORIGINAL_HOST' in request.META:
+        result['host'] = request.META["HTTP_MOCKATRON_ORIGINAL_HOST"].split(":")[0]
+        result['port'] = request.META["HTTP_MOCKATRON_ORIGINAL_HOST"].split(":")[1]
     else:
-        response = Response(agent=agent, label=UNKNOWN_DEFAULT_LABEL, content=UNKNOWN_DEFAULT_RESPONSE)
+        result['host'] = request.META["HTTP_HOST"].split(":")[0]
+        result['port'] = request.META["SERVER_PORT"]
+    result['path'] = request.path
+    result['method'] = request.method
+    result['content_type'] = request.META["CONTENT_TYPE"]
+    if result['content_type'] != None:
+        result['content_type'] = result['content_type'].split(";")[0]
+    return result
+
+def create_and_return_agent(agent_data):
+    agent = Agent(protocol=agent_data['protocol'], host=agent_data['host'], port=agent_data['port'], path=agent_data['path'], method=agent_data['method'], content_type=agent_data['content_type'])
+    agent.save()
+    if agent.content_type == 'text/xml':
+        try:
+            req = urllib.request.Request(agent.wsdl_url())
+            content = urllib.request.urlopen(req).read()
+            root = ElementTree.fromstring(content.decode(encoding='UTF-8'))
+            for operation_wsdl in root.findall('.//{http://schemas.xmlsoap.org/wsdl/}portType/{http://schemas.xmlsoap.org/wsdl/}operation'):
+
+                # Define input message
+                input_element = operation_wsdl.find('{http://schemas.xmlsoap.org/wsdl/}input')
+                input_element_str = input_element.attrib['message'][input_element.attrib['message'].find(':')+1:]
+                input_message_element = root.find('.//{http://schemas.xmlsoap.org/wsdl/}message[@name="' + input_element_str + '"]/{http://schemas.xmlsoap.org/wsdl/}part')
+                input_message_element_str = input_message_element.attrib['element'][input_message_element.attrib['element'].find(':')+1:]
+
+                # Define output message
+                output_element = operation_wsdl.find('{http://schemas.xmlsoap.org/wsdl/}output')
+                if output_element != None:
+                    output_element_str = output_element.attrib['message'][output_element.attrib['message'].find(':')+1:]
+                    output_message_element = root.find('.//{http://schemas.xmlsoap.org/wsdl/}message[@name="' + output_element_str + '"]/{http://schemas.xmlsoap.org/wsdl/}part')
+                    output_message_element_str = output_message_element.attrib['element'][output_message_element.attrib['element'].find(':')+1:]
+                else:
+                    output_message_element_str = None
+
+                operation = Operation(agent=agent, name=operation_wsdl.attrib['name'], input_message=input_message_element_str, output_message=output_message_element_str)
+                operation.save()
+
+                create_default_response(operation)
+        except Exception:
+            create_default_response(agent)
+    else:
+        create_default_response(agent)
+    return agent
+
+def create_default_response(provider):
+    parent_key = re.sub(r'class (.+\.)+', '', re.sub('[\'<>]', '', str(type(provider)))).lower()
+    if provider.get_content_type() == 'text/xml':
+        default_label = XML_DEFAULT_LABEL
+        default_response = XML_DEFAULT_RESPONSE
+    elif provider.get_content_type() == 'application/json':
+        default_label = JSON_DEFAULT_LABEL
+        default_response = JSON_DEFAULT_RESPONSE
+    else:
+        default_label = UNKNOWN_DEFAULT_LABEL
+        default_response = UNKNOWN_DEFAULT_RESPONSE
+    response_args = {parent_key: provider, 'label': default_label, 'content': default_response}
+    response = Response(**response_args)
     response.save()
 
 def responder(agent, request):
-
     response_method = None
 
-    # Evaluate request with Filter
-    if agent.filter_set.count() > 0:
-        for f in agent.filter_set.all():
-            if f.evaluate_request(request):
-                response_method = cache.get(f.hash())
+    # Evaluate request against Operations, if exists
+    if agent.operation_set.count() > 0:
+        for operation in agent.operation_set.all():
+            if operation.belongs_to(request):
+                response_method = cache.get(operation.hash())
                 if response_method == None:
-                    response_method = SimpleMockStrategy(f)
+                    response_method = MockResponderFactory.new_mock_response(operation)
                 break
 
-    # Find by cache if no filter contructs the response_method
+    # Find by Agent cache if anyone Operation matchs request
     if response_method == None:
         response_method = cache.get(agent.hash())
 
     # Contruct response_method based on Agent
     if response_method == None:
-        response_method = SimpleMockStrategy(agent)
+        response_method = MockResponderFactory.new_mock_response(agent)
 
     response = response_method.get()
     context = Context()

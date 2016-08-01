@@ -1,6 +1,10 @@
 # Choices for Models
-MOCK_STRATEGY = (
-    ('SIMPLE_MOCK_STRATEGY', 'Simple Mock Strategy'),
+SIMPLE_MOCK_RESPONDER = ('SIMPLE_MOCK_RESPONDER', 'Simple Mock Responder')
+FILTER_MOCK_RESPONDER = ('FILTER_MOCK_RESPONDER', 'Filter Mock Responder')
+
+MOCK_RESPONDERS = (
+    SIMPLE_MOCK_RESPONDER,
+    FILTER_MOCK_RESPONDER
 )
 
 HTTP_CODES = (
@@ -47,9 +51,13 @@ HTTP_CODES = (
     (505, '(505) HTTP Version Not Supported')
 )
 
-FIELD_TYPES = (
+REQUEST_FIELD_TYPES = (
     ('CONTENT', 'Content'),
     ('HEADER', 'HTTP Header'),
+    ('QUERY_PARAM', 'Query Parameter')
+)
+
+RESPONSE_FIELD_TYPES = (
     ('LABEL', 'Label'),
     ('HTTP_CODE', 'HTTP Code')
 )
@@ -58,7 +66,8 @@ OPERATORS = (
     ('EQUALS', 'Equals'),
     ('CONTAINS', 'Contains'),
     ('STARTS_WITH', 'Starts With'),
-    ('ENDS_WITH', 'Ends With')
+    ('ENDS_WITH', 'Ends With'),
+    ('REGEX', 'Regular Expression')
 )
 
 # Default Responses

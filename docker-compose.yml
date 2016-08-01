@@ -9,6 +9,7 @@ services:
     command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
       - ${PWD}:/code
+      - ${PWD}/hosts:/etc/hosts:ro
     ports:
       - "8000:8000"
     depends_on:
@@ -23,5 +24,8 @@ services:
       - ${PWD}/nginx/conf.d:/etc/nginx/conf.d
     ports:
       - "80:80"
+      - "8001:8001"
+      - "7080:7080"
+      - "8080:8080"
     depends_on:
       - web
