@@ -4,12 +4,25 @@ from django.core.cache import cache
 
 from .models import *
 
+def invalidate_cache_provider(provider):
+    cache.delete(provider.hash())
+    for f in provider.filter_set.all():
+        cache.delete(f.hash())
+
+@receiver(post_save, sender=Agent)
+def invalidate_cache_by_agent(sender, **kwargs):
+    invalidate_cache_provider(kwargs['instance'])
+
+@receiver(post_save, sender=Operation)
+def invalidate_cache_by_operation(sender, **kwargs):
+    invalidate_cache_provider(kwargs['instance'])
+
 @receiver(post_save, sender=Response)
 def invalidate_cache_by_response(sender, **kwargs):
     if kwargs['instance'].agent != None:
-        cache.delete(kwargs['instance'].agent.hash())
+        invalidate_cache_provider(kwargs['instance'].agent)
     if kwargs['instance'].operation != None:
-        cache.delete(kwargs['instance'].operation.hash())
+        invalidate_cache_provider(kwargs['instance'].operation)
 
 
 @receiver(post_save, sender=Filter)

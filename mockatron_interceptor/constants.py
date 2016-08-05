@@ -59,15 +59,23 @@ REQUEST_FIELD_TYPES = (
 
 RESPONSE_FIELD_TYPES = (
     ('LABEL', 'Label'),
-    ('HTTP_CODE', 'HTTP Code')
+    ('HTTP_CODE', 'HTTP Code'),
+    ('CONTENT', 'Content')
 )
 
-OPERATORS = (
+REQUEST_CONDITION_OPERATORS = (
     ('EQUALS', 'Equals'),
     ('CONTAINS', 'Contains'),
-    ('STARTS_WITH', 'Starts With'),
-    ('ENDS_WITH', 'Ends With'),
+    ('STARTSWITH', 'Starts With'),
+    ('ENDSWITH', 'Ends With'),
     ('REGEX', 'Regular Expression')
+)
+
+RESPONSE_CONDITION_OPERATORS = (
+    ('EQUALS', 'Equals'),
+    ('CONTAINS', 'Contains'),
+    ('STARTSWITH', 'Starts With'),
+    ('ENDSWITH', 'Ends With')
 )
 
 # Default Responses

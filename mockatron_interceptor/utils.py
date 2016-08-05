@@ -1,4 +1,3 @@
-from django.core.cache import cache
 from django.http import HttpResponse
 from django.template import Context
 
@@ -83,20 +82,14 @@ def responder(agent, request):
     if agent.operation_set.count() > 0:
         for operation in agent.operation_set.all():
             if operation.belongs_to(request):
-                response_method = cache.get(operation.hash())
-                if response_method == None:
-                    response_method = MockResponderFactory.new_mock_response(operation)
+                response_method = MockResponderFactory.get_mock_responder(operation)
                 break
 
-    # Find by Agent cache if anyone Operation matchs request
+    # Gets response_method based on Agent, if no one Operation matchs request before
     if response_method == None:
-        response_method = cache.get(agent.hash())
+        response_method = MockResponderFactory.get_mock_responder(agent)
 
-    # Contruct response_method based on Agent
-    if response_method == None:
-        response_method = MockResponderFactory.new_mock_response(agent)
-
-    response = response_method.get()
+    response = response_method.get() if isinstance(response_method, SimpleMockResponder) else response_method.get(request)
     context = Context()
     context['request'] = request
     if request.body != b'':

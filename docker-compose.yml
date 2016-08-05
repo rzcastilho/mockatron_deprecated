@@ -4,6 +4,8 @@ services:
     image: postgres
   cache:
     image: memcached
+    ports:
+      - "11211:11211"
   web:
     build: .
     command: python3 manage.py runserver 0.0.0.0:8000

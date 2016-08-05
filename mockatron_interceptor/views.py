@@ -11,7 +11,7 @@ def process(request):
         agent = Agent.objects.get(protocol=agent_data['protocol'], host=agent_data['host'], port=agent_data['port'], path=agent_data['path'], method=agent_data['method'])
         if agent.content_type == None and agent_data['content_type'] != None:
             agent.content_type = agent_data['content_type'].split(";")[0]
-        agent.save()
+            agent.save()
     except Agent.DoesNotExist:
         agent = create_and_return_agent(agent_data)
     return responder(agent, request)

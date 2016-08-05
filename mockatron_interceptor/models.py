@@ -30,7 +30,8 @@ class Agent(models.Model):
         if self.content_type == 'text/xml':
             return '{}://{}:{}{}?wsdl'.format(self.protocol, self.host, self.port, self.path)
         else:
-            raise Exception('There is no WSDL for Agent where content-type is different than text/xml')
+            raise Exception('There is no WSDL for Agent when content-type is different than text/xml')
+
 
 class Operation(models.Model):
     agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
@@ -54,6 +55,7 @@ class Operation(models.Model):
             return True
         return False
 
+
 class Response(models.Model):
     agent = models.ForeignKey(Agent, on_delete=models.CASCADE, null=True, blank=True)
     operation = models.ForeignKey(Operation, on_delete=models.CASCADE, null=True, blank=True)
@@ -76,8 +78,68 @@ class Response(models.Model):
     def template(self):
         return Template(self.content)
 
+    def clean(self):
+        if self.agent == None and self.operation == None:
+            raise ValidationError('Agent or Operation is required')
+        elif self.agent != None and self.operation != None:
+            raise ValidationError('Agent or Operation is required, you can\'t fill both')
+
+class Filter(models.Model):
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, null=True, blank=True)
+    operation = models.ForeignKey(Operation, on_delete=models.CASCADE, null=True, blank=True)
+    label = models.CharField(max_length=256)
+    priority = models.IntegerField(default=0)
+    enable = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['priority']
+
+    def __str__(self):
+        return '{} {} [{}] {}'.format(self.label, self.requestcondition_set.all(), self.priority, self.agent)
+
+    def hash(self):
+        return hashlib.md5(str(self).encode('utf-8')).hexdigest()
+
+    def clean(self):
+        if self.agent == None and self.operation == None:
+            raise ValidationError('Agent or Operation is required')
+        elif self.agent != None and self.operation != None:
+            raise ValidationError('Agent or Operation is required, you can\'t fill both')
+
+    def evaluate_request(self, request):
+        result = True
+        for c in self.requestcondition_set.all():
+            # Define source string
+            if c.field_type == 'CONTENT':
+                input_value = request.body.decode("utf-8")
+            elif c.field_type == 'HEADER':
+                input_value = request.META[c.header_or_query_param]
+            elif c.field_type == 'QUERY_PARAM':
+                input_value = request.GET[c.header_or_query_param] if len(request.GET) > len(request.GET) else request.POST[c.header_or_query_param]
+
+            # Return according with operator
+            if c.operator == 'EQUALS':
+                result = c.value == input_value
+            elif c.operator == 'CONTAINS':
+                result = c.value in input_value
+            elif c.operator == 'STARTSWITH':
+                result = input_value.startswith(c.value)
+            elif c.operator == 'ENDSWITH':
+                result = input_value.endswith(c.value)
+            elif c.operator == 'REGEX':
+                print(c.value)
+                regex = re.compile(c.value)
+                print(regex)
+                result = len(regex.findall(input_value)) > 0
+
+            if not result:
+                return result
+
+        print(result)
+        return result
+
 class Condition(models.Model):
-    operator = models.CharField(max_length=16, choices=OPERATORS)
+    filter = models.ForeignKey(Filter, on_delete=models.CASCADE)
     value = models.CharField(max_length=256)
 
     class Meta:
@@ -86,56 +148,16 @@ class Condition(models.Model):
     def __str__(self):
         return '[{}] [{}] [{}]'.format(self.field_type, self.operator, self.value)
 
+
 class RequestCondition(Condition):
     field_type = models.CharField(max_length=32, choices=REQUEST_FIELD_TYPES)
+    operator = models.CharField(max_length=16, choices=REQUEST_CONDITION_OPERATORS)
+    header_or_query_param = models.CharField(max_length=64, null=True, blank=True)
 
+    def clean(self):
+        if self.field_type in ['HEADER', 'QUERY_PARAM'] and (self.header_or_query_param == None or self.header_or_query_param == ''): # HEADER
+            raise ValidationError('Header field is required when condition filter type is set to HTTP Header or Query Parameter')
 
 class ResponseCondition(Condition):
     field_type = models.CharField(max_length=32, choices=RESPONSE_FIELD_TYPES)
-
-
-class Filter(models.Model):
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, null=True, blank=True)
-    operation = models.ForeignKey(Operation, on_delete=models.CASCADE, null=True, blank=True)
-    label = models.CharField(max_length=256)
-    request_condition = models.OneToOneField(RequestCondition, related_name="request_condition")
-    header_or_query_param = models.CharField(max_length=64, null=True, blank=True)
-    response_conditions = models.ManyToManyField(ResponseCondition, related_name="response_conditions")
-
-    def __str__(self):
-        if self.header_or_query_param != None and self.header_or_query_param != '':
-            return '{} ([{}] {}) {}'.format(self.label, self.header_or_query_param, self.request_condition, self.agent)
-        else:
-            return '{} ({}) {}'.format(self.label, self.request_condition, self.agent)
-
-    def hash(self):
-        return hashlib.md5(str(self).encode('utf-8')).hexdigest()
-
-    def clean(self):
-        if self.request_condition.field_type in ['HEADER', 'QUERY_PARAM'] and (self.header_or_query_param == None or self.header_or_query_param == ''): # HEADER
-            raise ValidationError('Header field is required when request filter type is set to HTTP Header or Query Parameter')
-
-    def evaluate_request(self, request):
-
-        # Define source string
-        if self.request_condition.field_type == 'CONTENT':
-            input_value = request.body.decode("utf-8")
-        elif self.request_condition.field_type == 'HEADER':
-            input_value = request.META[self.header_or_query_param]
-        elif self.request_condition.field_type == 'QUERY_PARAM':
-            input_value = request.GET[self.header_or_query_param] if len(request.GET) > len(request.GET) else request.POST[self.header_or_query_param]
-
-        # Return according with operator
-        if self.request_condition.operator == 'EQUALS':
-            return self.request_condition.value == input_value
-        elif self.request_condition.operator == 'CONTAINS':
-            return self.request_condition.value in input_value
-        elif self.request_condition.operator == 'STARTS_WITH':
-            return input_value.startswith(self.request_condition.value)
-        elif self.request_condition.operator == 'ENDS_WITH':
-            return input_value.endswith(self.request_condition.value)
-        elif self.request_condition.operator == 'REGEX':
-            regex = re.compile(self.request_condition.value)
-            return len(regex.findall(input_value)) > 0
-
-        return False
+    operator = models.CharField(max_length=16, choices=RESPONSE_CONDITION_OPERATORS)
