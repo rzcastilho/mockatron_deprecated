@@ -3,7 +3,7 @@ from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from mockatron_interceptor.models import Agent
+from mockatron_core.models import Agent
 from .serializers import AgentSerializer, OperationSerializer, ResponseSerializer, FilterSerializer
 
 class AgentList(generics.ListCreateAPIView):

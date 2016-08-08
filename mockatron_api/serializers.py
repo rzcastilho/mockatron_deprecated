@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from mockatron_interceptor.models import *
+from mockatron_core.models import *
 
 class AgentSerializer(serializers.ModelSerializer):
     class Meta:

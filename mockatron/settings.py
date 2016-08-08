@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'rest_framework',
-    'mockatron_interceptor.apps.MockatronInterceptorConfig',
+    'mockatron_core.apps.MockatronCoreConfig',
     'mockatron_api.apps.MockatronApiConfig',
     'django.contrib.admin',
     'django.contrib.auth',
