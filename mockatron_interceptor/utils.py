@@ -79,8 +79,8 @@ def responder(agent, request):
     response_method = None
 
     # Evaluate request against Operations, if exists
-    if agent.operation_set.count() > 0:
-        for operation in agent.operation_set.all():
+    if agent.operations.count() > 0:
+        for operation in agent.operations.all():
             if operation.belongs_to(request):
                 response_method = MockResponderFactory.get_mock_responder(operation)
                 break

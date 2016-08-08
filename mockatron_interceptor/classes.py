@@ -24,7 +24,7 @@ class BaseMockResponder:
 
 class SimpleMockResponder(BaseMockResponder):
     def __init__(self, provider):
-        super().__init__(provider.response_set.filter(Q(enable=True)))
+        super().__init__(provider.responses.filter(Q(enable=True)))
         self.cache_id = provider.hash()
         cache.set(self.cache_id, self)
 
@@ -35,19 +35,19 @@ class SimpleMockResponder(BaseMockResponder):
 
 class FilterMockResponder:
     def __init__(self, provider):
-        self.filters = provider.filter_set.filter(Q(enable=True))
+        self.filters = provider.filters.filter(Q(enable=True))
         self.cache_id = provider.hash()
         cache.set(self.cache_id, self)
 
     def get_responses_by_filter(self, filter):
         query = Q()
         provider = filter.agent if filter.agent != None else filter.operation
-        for c in filter.responsecondition_set.all():
+        for c in filter.response_conditions.all():
             key = c.field_type.lower()
             if c.operator != 'EQUALS':
                 key = key + "__" + c.operator.lower()
             query &= Q((key, c.value))
-        return provider.response_set.filter(query)
+        return provider.responses.filter(query)
 
     def get(self, request):
         for f in self.filters:
@@ -65,7 +65,7 @@ class MockResponderFactory:
         response_method = cache.get(provider.hash())
         if response_method != None:
             return response_method
-        if provider.responder == FILTER_MOCK_RESPONDER[0] and provider.filter_set.all().count() > 0:
+        if provider.responder == FILTER_MOCK_RESPONDER[0] and provider.filters.all().count() > 0:
             return FilterMockResponder(provider)
         else:
             return SimpleMockResponder(provider)

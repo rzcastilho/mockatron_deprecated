@@ -18,5 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^mockatron/admin/', admin.site.urls),
-    url(r'^', include('mockatron_interceptor.urls')),
+    url(r'^mockatron/api/', include('mockatron_api.urls')),
+    url(r'^', include('mockatron_interceptor.urls'))
 ]

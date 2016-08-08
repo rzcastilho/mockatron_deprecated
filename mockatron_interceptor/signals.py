@@ -4,35 +4,39 @@ from django.core.cache import cache
 
 from .models import *
 
-def invalidate_cache_provider(provider):
+def invalidate_cache_by_provider(provider):
     cache.delete(provider.hash())
-    for f in provider.filter_set.all():
+    for f in provider.filters.all():
         cache.delete(f.hash())
 
 @receiver(post_save, sender=Agent)
 def invalidate_cache_by_agent(sender, **kwargs):
-    invalidate_cache_provider(kwargs['instance'])
+    invalidate_cache_by_provider(kwargs['instance'])
 
 @receiver(post_save, sender=Operation)
 def invalidate_cache_by_operation(sender, **kwargs):
-    invalidate_cache_provider(kwargs['instance'])
+    invalidate_cache_by_provider(kwargs['instance'])
 
 @receiver(post_save, sender=Response)
 def invalidate_cache_by_response(sender, **kwargs):
     if kwargs['instance'].agent != None:
-        invalidate_cache_provider(kwargs['instance'].agent)
+        invalidate_cache_by_provider(kwargs['instance'].agent)
     if kwargs['instance'].operation != None:
-        invalidate_cache_provider(kwargs['instance'].operation)
-
+        invalidate_cache_by_provider(kwargs['instance'].operation)
 
 @receiver(post_save, sender=Filter)
 def invalidate_cache_by_filter(sender, **kwargs):
     cache.delete(kwargs['instance'].hash())
 
-@receiver(post_save, sender=Condition)
-def invalidate_cache_by_condition(sender, **kwargs):
+def invalidate_cache_by_condition(condition):
+    cache.delete(condition.filter.hash())
+
+@receiver(post_save, sender=RequestCondition)
+def invalidate_cache_by_request_condition(sender, **kwargs):
     if not kwargs['created']:
-        try:
-            cache.delete(kwargs['instance'].request_filter.hash())
-        except:
-            cache.delete(kwargs['instance'].response_filters.all()[0].hash())
+        invalidate_cache_by_condition(kwargs['instance'])
+
+@receiver(post_save, sender=ResponseCondition)
+def invalidate_cache_by_request_condition(sender, **kwargs):
+    if not kwargs['created']:
+        invalidate_cache_by_condition(kwargs['instance'])

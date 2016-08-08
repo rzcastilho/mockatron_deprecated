@@ -17,6 +17,9 @@ class Agent(models.Model):
     responder = models.CharField(default=SIMPLE_MOCK_RESPONDER[0], max_length=64, choices=MOCK_RESPONDERS)
     created = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        unique_together = ('protocol', 'host', 'port', 'path', 'method')
+
     def __str__(self):
         return '[{}] {}://{}:{}{}'.format(self.method, self.protocol, self.host, self.port, self.path)
 
@@ -34,7 +37,7 @@ class Agent(models.Model):
 
 
 class Operation(models.Model):
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name='operations')
     name = models.CharField(max_length=128)
     input_message = models.CharField(max_length=128)
     output_message = models.CharField(max_length=128, null=True, blank=True)
@@ -57,8 +60,8 @@ class Operation(models.Model):
 
 
 class Response(models.Model):
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, null=True, blank=True)
-    operation = models.ForeignKey(Operation, on_delete=models.CASCADE, null=True, blank=True)
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, null=True, blank=True, related_name='responses')
+    operation = models.ForeignKey(Operation, on_delete=models.CASCADE, null=True, blank=True, related_name='responses')
     label = models.CharField(max_length=256)
     http_code = models.IntegerField(default=HTTP_CODES[0][0], choices=HTTP_CODES)
     content = models.TextField()
@@ -85,8 +88,8 @@ class Response(models.Model):
             raise ValidationError('Agent or Operation is required, you can\'t fill both')
 
 class Filter(models.Model):
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, null=True, blank=True)
-    operation = models.ForeignKey(Operation, on_delete=models.CASCADE, null=True, blank=True)
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, null=True, blank=True, related_name='filters')
+    operation = models.ForeignKey(Operation, on_delete=models.CASCADE, null=True, blank=True, related_name='filters')
     label = models.CharField(max_length=256)
     priority = models.IntegerField(default=0)
     enable = models.BooleanField(default=True)
@@ -95,7 +98,7 @@ class Filter(models.Model):
         ordering = ['priority']
 
     def __str__(self):
-        return '{} {} [{}] {}'.format(self.label, self.requestcondition_set.all(), self.priority, self.agent)
+        return '{} {} [{}] {}'.format(self.label, self.request_conditions.all(), self.priority, self.agent)
 
     def hash(self):
         return hashlib.md5(str(self).encode('utf-8')).hexdigest()
@@ -108,7 +111,7 @@ class Filter(models.Model):
 
     def evaluate_request(self, request):
         result = True
-        for c in self.requestcondition_set.all():
+        for c in self.request_conditions.all():
             # Define source string
             if c.field_type == 'CONTENT':
                 input_value = request.body.decode("utf-8")
@@ -139,7 +142,6 @@ class Filter(models.Model):
         return result
 
 class Condition(models.Model):
-    filter = models.ForeignKey(Filter, on_delete=models.CASCADE)
     value = models.CharField(max_length=256)
 
     class Meta:
@@ -150,6 +152,7 @@ class Condition(models.Model):
 
 
 class RequestCondition(Condition):
+    filter = models.ForeignKey(Filter, on_delete=models.CASCADE, related_name='request_conditions')
     field_type = models.CharField(max_length=32, choices=REQUEST_FIELD_TYPES)
     operator = models.CharField(max_length=16, choices=REQUEST_CONDITION_OPERATORS)
     header_or_query_param = models.CharField(max_length=64, null=True, blank=True)
@@ -159,5 +162,6 @@ class RequestCondition(Condition):
             raise ValidationError('Header field is required when condition filter type is set to HTTP Header or Query Parameter')
 
 class ResponseCondition(Condition):
+    filter = models.ForeignKey(Filter, on_delete=models.CASCADE, related_name='response_conditions')
     field_type = models.CharField(max_length=32, choices=RESPONSE_FIELD_TYPES)
     operator = models.CharField(max_length=16, choices=RESPONSE_CONDITION_OPERATORS)
