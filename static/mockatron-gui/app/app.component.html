@@ -1,0 +1,25 @@
+<md-sidenav-layout fullscreen>
+  <md-sidenav #start>
+    <md-nav-list>
+      <a md-list-item [routerLink]="['agent']">Agents</a>
+    </md-nav-list>
+    <button md-button (click)="start.close()">CLOSE</button>
+  </md-sidenav>
+  <div>
+    <md-toolbar color="primary">
+      <button md-icon-button (click)="start.open()">
+        <md-icon>menu</md-icon>
+      </button>
+      <div>
+        <h2>Mockatron</h2>
+      </div>
+      <span class="fill-remaining"></span>
+      <button md-icon-button (click)="logout()">
+        <md-icon>power_settings_new</md-icon>
+      </button>
+    </md-toolbar>
+    <div>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</md-sidenav-layout>

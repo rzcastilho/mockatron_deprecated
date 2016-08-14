@@ -8,7 +8,7 @@ services:
       - "11211:11211"
   web:
     build: .
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ${PWD}:/code
       - ${PWD}/hosts:/etc/hosts:ro
@@ -24,6 +24,7 @@ services:
       - ${PWD}/nginx/favicon.ico:/etc/nginx/favicon.ico
       - ${PWD}/nginx/mockatron.conf:/etc/nginx/mockatron.conf
       - ${PWD}/nginx/conf.d:/etc/nginx/conf.d
+      - ${PWD}/static:/usr/share/nginx/html
     ports:
       - "80:80"
       - "8001:8001"

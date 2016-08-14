@@ -1,0 +1,17 @@
+<md-card>
+  <form role="form" #signinForm="ngForm">
+    <md-card-title>Sign In</md-card-title>
+    <md-card-content>
+      <p>
+        <md-input style="width: 100%" placeholder="username" id="username" required [(ngModel)]="login.username" name="username" #username="ngModel"></md-input>
+      </p>
+      <p>
+        <md-input style="width: 100%" placeholder="password" type="password" id="password" required [(ngModel)]="login.password" name="password" #password="ngModel"></md-input>
+      </p>
+    </md-card-content>
+    <md-card-actions align="center">
+      <button [class.disabled]="!signinForm.form.valid" (click)="signin(login)" md-raised-button>Sign In</button>
+      <button md-raised-button [routerLink]="['/signup']">Register</button>
+    </md-card-actions>
+  </form>
+</md-card>

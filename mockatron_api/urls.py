@@ -1,8 +1,9 @@
 from django.conf.urls import url
-
+from rest_framework.authtoken import views as auth_views
 from . import views
 
 urlpatterns = [
+    url(r'^token/', auth_views.obtain_auth_token),
     # Agents
     url(r'^agents/$', views.AgentList.as_view()),
     url(r'^agents/(?P<pk>[0-9]+)$', views.AgentDetail.as_view()),

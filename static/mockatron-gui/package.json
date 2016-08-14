@@ -1,0 +1,72 @@
+{
+  "name": "mockatron",
+  "version": "1.0.0",
+  "description": "Just a Mock Server",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "typings install",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "typings": "typings"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodrigozc/mockatron.git"
+  },
+  "keywords": [
+    "mock",
+    "environment",
+    "simulator",
+    "mockatron"
+  ],
+  "author": "Rodrigo Zampieri Castilho <rodrigo.zampieri@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/rodrigozc/mockatron/issues"
+  },
+  "homepage": "https://github.com/rodrigozc/mockatron#readme",
+  "dependencies": {
+    "@angular/common": "2.0.0-rc.5",
+    "@angular/compiler": "2.0.0-rc.5",
+    "@angular/core": "2.0.0-rc.5",
+    "@angular/forms": "0.3.0",
+    "@angular/http": "2.0.0-rc.5",
+    "@angular/platform-browser": "2.0.0-rc.5",
+    "@angular/platform-browser-dynamic": "2.0.0-rc.5",
+    "@angular/router": "3.0.0-rc.1",
+    "@angular/router-deprecated": "2.0.0-rc.2",
+    "@angular/upgrade": "2.0.0-rc.5",
+    "@angular2-material/button": "^2.0.0-alpha.7-2",
+    "@angular2-material/button-toggle": "^2.0.0-alpha.7-2",
+    "@angular2-material/card": "^2.0.0-alpha.7-2",
+    "@angular2-material/checkbox": "^2.0.0-alpha.7-2",
+    "@angular2-material/core": "^2.0.0-alpha.7-2",
+    "@angular2-material/grid-list": "^2.0.0-alpha.7-2",
+    "@angular2-material/icon": "^2.0.0-alpha.7-2",
+    "@angular2-material/input": "^2.0.0-alpha.7-2",
+    "@angular2-material/list": "^2.0.0-alpha.7-2",
+    "@angular2-material/menu": "^2.0.0-alpha.7-2",
+    "@angular2-material/progress-bar": "^2.0.0-alpha.7-2",
+    "@angular2-material/progress-circle": "^2.0.0-alpha.7-2",
+    "@angular2-material/radio": "^2.0.0-alpha.7-2",
+    "@angular2-material/sidenav": "^2.0.0-alpha.7-2",
+    "@angular2-material/slide-toggle": "^2.0.0-alpha.7-2",
+    "@angular2-material/slider": "^2.0.0-alpha.7-2",
+    "@angular2-material/tabs": "^2.0.0-alpha.7-2",
+    "@angular2-material/toolbar": "^2.0.0-alpha.7-2",
+    "@angular2-material/tooltip": "^2.0.0-alpha.7-2",
+    "angular2-in-memory-web-api": "0.0.15",
+    "core-js": "^2.4.0",
+    "hammerjs": "^2.0.8",
+    "reflect-metadata": "^0.1.3",
+    "rxjs": "5.0.0-beta.6",
+    "systemjs": "0.19.27",
+    "zone.js": "^0.6.12"
+  },
+  "devDependencies": {
+    "concurrently": "^2.0.0",
+    "lite-server": "^2.2.0",
+    "typescript": "^1.8.10",
+    "typings": "^1.0.4"
+  }
+}
