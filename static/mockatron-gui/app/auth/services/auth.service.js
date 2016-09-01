@@ -10,10 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
-var Observable_1 = require('rxjs/Observable');
+var Rx_1 = require('rxjs/Rx');
+var message_service_1 = require('../../common/services/message.service');
 var AuthService = (function () {
-    function AuthService(http) {
+    function AuthService(http, messageService) {
         this.http = http;
+        this.messageService = messageService;
     }
     AuthService.prototype.login = function (username, password) {
         var _this = this;
@@ -31,6 +33,16 @@ var AuthService = (function () {
         })
             .catch(function (error) { return _this.handleError(error, "Sign in error."); });
     };
+    AuthService.prototype.signup = function (user) {
+        var _this = this;
+        var body = JSON.stringify(user);
+        var headers = new http_1.Headers();
+        headers.append('Content-Type', 'application/json');
+        var options = new http_1.RequestOptions({ headers: headers });
+        return this.http.post('/mockatron/api/signup/', body, options)
+            .map(function (res) { return res.json(); })
+            .catch(function (error) { return _this.handleError(error, "Sign up error."); });
+    };
     AuthService.prototype.logout = function () {
         localStorage.removeItem('token');
     };
@@ -38,11 +50,11 @@ var AuthService = (function () {
         return !!localStorage.getItem('token');
     };
     AuthService.prototype.handleError = function (error, message) {
-        return Observable_1.Observable.throw({ message: message, detail: error || 'Server error' });
+        return Rx_1.Observable.throw(this.messageService.error(message, error.json().message || error.json().error || 'Server error'));
     };
     AuthService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [http_1.Http, message_service_1.MessageService])
     ], AuthService);
     return AuthService;
 }());

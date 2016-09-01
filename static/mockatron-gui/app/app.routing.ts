@@ -1,7 +1,8 @@
-import { Routes, RouterModule } from '@angular/router';
-import { authRoutes, authProviders } from './auth/auth.routing';
-import { pagesRoutes } from './pages/pages.routing';
-import { adminRoutes } from './admin/admin.routing';
+import {Routes, RouterModule} from '@angular/router';
+import {commonProviders} from './common/common.resources';
+import {authRoutes, authProviders} from './auth/auth.routing';
+import {pagesRoutes, pagesProviders} from './pages/pages.routing';
+import {adminRoutes, adminProviders} from './admin/admin.routing';
 
 const routes: Routes = [
   { path: '', redirectTo: '/signin', pathMatch: 'full' },
@@ -11,7 +12,10 @@ const routes: Routes = [
 ];
 
 export const appRoutingProviders: any[] = [
-  authProviders
+  commonProviders,
+  authProviders,
+  adminProviders,
+  pagesProviders
 ];
 
 export const routing = RouterModule.forRoot(routes, { useHash: true });

@@ -9,15 +9,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var auth_service_1 = require('../services/auth.service');
 var SignupComponent = (function () {
-    function SignupComponent() {
+    function SignupComponent(authService, router) {
+        this.authService = authService;
+        this.router = router;
+        this.user = {};
+        this.userError = null;
     }
+    SignupComponent.prototype.signup = function (user) {
+        var _this = this;
+        this.authService.signup(user).subscribe(function (user) { return _this.router.navigate(['signin']); }, function (error) { return _this.userError = error; });
+    };
     SignupComponent = __decorate([
         core_1.Component({
             selector: 'signup',
             templateUrl: 'app/auth/components/signup.component.html'
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [auth_service_1.AuthService, router_1.Router])
     ], SignupComponent);
     return SignupComponent;
 }());

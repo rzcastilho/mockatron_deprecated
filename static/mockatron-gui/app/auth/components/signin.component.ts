@@ -15,7 +15,7 @@ export class SigninComponent {
 
   signin(login: any) {
     this.authService.login(login.username, login.password).subscribe(
-      user => this.router.navigate(['home']),
+      user => this.router.navigate(['dashboard']),
       error => this.loginError = error
     );
   }

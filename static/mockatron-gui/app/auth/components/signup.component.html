@@ -1,3 +1,31 @@
-<md-toolbar color="primary">
-  <span>Sign Up</span>
-</md-toolbar>
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+    <h3>Sign Up</h3>
+    <form role="form" #signupForm="ngForm">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="first name" id="first_name" required [(ngModel)]="user.first_name" name="first_name" #first_name="ngModel"/>
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="last name" id="last_name" required [(ngModel)]="user.last_name" name="last_name" #last_name="ngModel"/>
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="email" id="email" required [(ngModel)]="user.email" name="email" #email="ngModel"/>
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="username" id="username" required [(ngModel)]="user.username" name="username" #username="ngModel"/>
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" placeholder="password" id="password" required [(ngModel)]="user.password" name="password" #password="ngModel"/>
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" placeholder="confirm password" id="confirmPassword" required [(ngModel)]="user.confirmPassword" name="confirmPassword" #confirmPassword="ngModel"/>
+      </div>
+      <button class="btn btn-primary" [disabled]="!signupForm.form.valid" (click)="signup(user)">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Sign Up
+      </button>
+      <button class="btn btn-default" [routerLink]="['/signin']">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+      </button>
+    </form>
+  </div>
+</div>

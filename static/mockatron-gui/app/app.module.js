@@ -12,30 +12,22 @@ var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var app_component_1 = require('./app.component');
 var forms_1 = require('@angular/forms');
-var button_1 = require('@angular2-material/button');
-var button_toggle_1 = require('@angular2-material/button-toggle');
-var card_1 = require('@angular2-material/card');
-var checkbox_1 = require('@angular2-material/checkbox');
-var core_2 = require('@angular2-material/core');
-var grid_list_1 = require('@angular2-material/grid-list');
-var icon_1 = require('@angular2-material/icon');
-var input_1 = require('@angular2-material/input');
-var list_1 = require('@angular2-material/list');
-var menu_1 = require('@angular2-material/menu');
-var progress_bar_1 = require('@angular2-material/progress-bar');
-var progress_circle_1 = require('@angular2-material/progress-circle');
-var radio_1 = require('@angular2-material/radio');
-var sidenav_1 = require('@angular2-material/sidenav');
-var slider_1 = require('@angular2-material/slider');
-var slide_toggle_1 = require('@angular2-material/slide-toggle');
-var tabs_1 = require('@angular2-material/tabs');
-var toolbar_1 = require('@angular2-material/toolbar');
-var tooltip_1 = require('@angular2-material/tooltip');
+var http_1 = require('@angular/http');
 var app_routing_1 = require('./app.routing');
+var messages_panel_component_1 = require('./common/components/messages.panel.component');
 var signin_component_1 = require('./auth/components/signin.component');
 var signup_component_1 = require('./auth/components/signup.component');
-var home_component_1 = require('./pages/home/home.component');
+var dashboard_component_1 = require('./pages/dashboard/dashboard.component');
 var agent_component_1 = require('./admin/agent/components/agent.component');
+var agent_form_component_1 = require('./admin/agent/components/agent.form.component');
+var operation_component_1 = require('./admin/operation/components/operation.component');
+var operation_form_component_1 = require('./admin/operation/components/operation.form.component');
+var response_component_1 = require('./admin/response/components/response.component');
+var response_form_component_1 = require('./admin/response/components/response.form.component');
+var filter_component_1 = require('./admin/filter/components/filter.component');
+var filter_form_component_1 = require('./admin/filter/components/filter.form.component');
+var request_condition_resume_modal_1 = require('./admin/request_condition/components/request.condition.resume.modal');
+var response_condition_resume_modal_1 = require('./admin/response_condition/components/response.condition.resume.modal');
 var AppModule = (function () {
     function AppModule() {
     }
@@ -43,34 +35,27 @@ var AppModule = (function () {
         core_1.NgModule({
             declarations: [
                 app_component_1.AppComponent,
+                messages_panel_component_1.MessagesPanelComponent,
                 signin_component_1.SigninComponent,
                 signup_component_1.SignupComponent,
-                home_component_1.HomeComponent,
-                agent_component_1.AgentComponent
+                dashboard_component_1.DashboardComponent,
+                agent_component_1.AgentComponent,
+                agent_form_component_1.AgentFormComponent,
+                operation_component_1.OperationComponent,
+                operation_form_component_1.OperationFormComponent,
+                response_component_1.ResponseComponent,
+                response_form_component_1.ResponseFormComponent,
+                filter_component_1.FilterComponent,
+                filter_form_component_1.FilterFormComponent,
+                request_condition_resume_modal_1.RequestConditionResumeModalComponent,
+                response_condition_resume_modal_1.ResponseConditionResumeModalComponent
             ],
             imports: [
                 platform_browser_1.BrowserModule,
                 forms_1.FormsModule,
-                app_routing_1.routing,
-                button_1.MdButtonModule,
-                button_toggle_1.MdButtonToggleModule,
-                card_1.MdCardModule,
-                checkbox_1.MdCheckboxModule,
-                core_2.MdCoreModule,
-                grid_list_1.MdGridListModule,
-                icon_1.MdIconModule,
-                input_1.MdInputModule,
-                list_1.MdListModule,
-                menu_1.MdMenuModule,
-                progress_bar_1.MdProgressBarModule,
-                progress_circle_1.MdProgressCircleModule,
-                radio_1.MdRadioModule,
-                sidenav_1.MdSidenavModule,
-                slider_1.MdSliderModule,
-                slide_toggle_1.MdSlideToggleModule,
-                tabs_1.MdTabsModule,
-                toolbar_1.MdToolbarModule,
-                tooltip_1.MdTooltipModule
+                http_1.HttpModule,
+                http_1.JsonpModule,
+                app_routing_1.routing
             ],
             providers: [
                 app_routing_1.appRoutingProviders

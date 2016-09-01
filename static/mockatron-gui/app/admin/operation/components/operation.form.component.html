@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <h3>Operation</h3>
+    <form *ngIf="operation" role="form" #operationForm="ngForm">
+      <div class="form-group">
+        <select class="form-control" id="agent" required [(ngModel)]="operation.agent" name="agent" #agent="ngModel">
+          <option *ngFor="let agent of agents" [value]="agent.id">{{agent.protocol}}://{{agent.host}}:{{agent.port}}{{agent.path}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" placeholder="name" id="name" required [(ngModel)]="operation.name" name="name" #name="ngModel"/>
+        <div [hidden]="name.pristine || name.valid" class="alert alert-danger">Please, inform a name.</div>
+      </div>
+      <div class="form-group">
+        <label for="input_message">Input Message</label>
+        <input type="text" class="form-control" placeholder="input message" id="input_message" required [(ngModel)]="operation.input_message" name="input_message" #input_message="ngModel"/>
+        <div [hidden]="input_message.pristine || input_message.valid" class="alert alert-danger">Please, inform an input message.</div>
+      </div>
+      <div class="form-group">
+        <label for="output_message">Output Message</label>
+        <input type="text" class="form-control" placeholder="output message" id="output_message" [(ngModel)]="operation.output_message" name="output_message" #output_message="ngModel"/>
+      </div>
+      <div class="form-group">
+        <label for="responder">Responder</label>
+        <select class="form-control" id="responder" required [(ngModel)]="operation.responder" name="responder" #responder="ngModel">
+          <option value="SIMPLE_MOCK_RESPONDER">Simple Mock</option>
+          <option value="FILTER_MOCK_RESPONDER">Filter Mock</option>
+        </select>
+        <div [hidden]="responder.pristine || responder.valid" class="alert alert-danger">Please, inform a responder.</div>
+      </div>
+      <button class="btn btn-primary" [disabled]="!operationForm.form.valid" (click)="save(operation)">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Save
+      </button>
+      <button class="btn btn-default" [routerLink]="['/operation']">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+      </button>
+    </form>
+  </div>
+</div>

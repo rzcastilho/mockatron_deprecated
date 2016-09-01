@@ -1,0 +1,88 @@
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <h3>Response</h3>
+    <form *ngIf="response" role="form" #responseForm="ngForm">
+      <div class="form-group">
+        <label for="agent">Agent</label>
+        <select class="form-control" id="agent" required [(ngModel)]="response.agent" name="agent" #agent="ngModel" (change)="selectAgent($event.target.value)">
+          <option *ngFor="let agent of agents" [value]="agent.id">{{agent.protocol}}://{{agent.host}}:{{agent.port}}{{agent.path}}</option>
+        </select>
+      </div>
+      <div *ngIf="selectedAgent && operations && operations.length > 0" class="form-group">
+        <label for="operation">Operation</label>
+        <select class="form-control" id="operation" required [(ngModel)]="response.operation" name="operation" #operation="ngModel">
+          <option>None</option>
+          <option *ngFor="let operation of operations" [value]="operation.id">{{operation.name}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="label">Label</label>
+        <input type="text" class="form-control" placeholder="label" id="name" required [(ngModel)]="response.label" name="label" #label="ngModel"/>
+        <div [hidden]="label.pristine || label.valid" class="alert alert-danger">Please, inform a label.</div>
+      </div>
+      <div class="form-group">
+        <label for="http_code">HTTP Code</label>
+        <select class="form-control" id="http_code" required [(ngModel)]="response.http_code" name="http_code" #http_code="ngModel">
+          <option value="200">(200) OK</option>
+          <option value="500">(500) Internal Server Error</option>
+          <option value="100">(100) Continue</option>
+          <option value="101">(101) Switching Protocols</option>
+          <option value="201">(201) Created</option>
+          <option value="202">(202) Accepted</option>
+          <option value="203">(203) Non-Authoritative Information</option>
+          <option value="204">(204) No Content</option>
+          <option value="205">(205) Reset Content</option>
+          <option value="206">(206) Partial Content</option>
+          <option value="300">(300) Multiple Choices</option>
+          <option value="301">(301) Moved Permanently</option>
+          <option value="302">(302) Found</option>
+          <option value="303">(303) See Other</option>
+          <option value="304">(304) Not Modified</option>
+          <option value="305">(305) Use Proxy</option>
+          <option value="306">(306) (Unused)</option>
+          <option value="307">(307) Temporary Redirect</option>
+          <option value="400">(400) Bad Request</option>
+          <option value="401">(401) Unauthorized</option>
+          <option value="402">(402) Payment Required</option>
+          <option value="403">(403) Forbidden</option>
+          <option value="404">(404) Not Found</option>
+          <option value="405">(405) Method Not Allowed</option>
+          <option value="406">(406) Not Acceptable</option>
+          <option value="407">(407) Proxy Authentication Required</option>
+          <option value="408">(408) Request Timeout</option>
+          <option value="409">(409) Conflict</option>
+          <option value="410">(410) Gone</option>
+          <option value="411">(411) Length Required</option>
+          <option value="412">(412) Precondition Failed</option>
+          <option value="413">(413) Request Entity Too Large</option>
+          <option value="414">(414) Request-URI Too Long</option>
+          <option value="415">(415) Unsupported Media Type</option>
+          <option value="416">(416) Requested Range Not Satisfiable</option>
+          <option value="417">(417) Expectation Failed</option>
+          <option value="501">(501) Not Implemented</option>
+          <option value="502">(502) Bad Gateway</option>
+          <option value="503">(503) Service Unavailable</option>
+          <option value="504">(504) Gateway Timeout</option>
+          <option value="505">(505) HTTP Version Not Supported</option>
+        </select>
+        <div [hidden]="http_code.pristine || http_code.valid" class="alert alert-danger">Please, inform a HTTP code.</div>
+      </div>
+      <div class="form-group">
+        <label for="content">Content</label>
+        <textarea rows="15" class="form-control" id="content" required [(ngModel)]="response.content" name="content" #content="ngModel"></textarea>
+        <div [hidden]="content.pristine || content.valid" class="alert alert-danger">Please, inform a content.</div>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="enable" [(ngModel)]="response.enable" name="enable" #enable="ngModel"> Enable?
+        </label>
+      </div>
+      <button class="btn btn-primary" [disabled]="!responseForm.form.valid" (click)="save(response)">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Save
+      </button>
+      <button class="btn btn-default" [routerLink]="['/response']">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+      </button>
+    </form>
+  </div>
+</div>

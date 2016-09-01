@@ -1,0 +1,57 @@
+<h3>Operations</h3>
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Input Message</th>
+    <th>Output Message</th>
+    <th>Responder</th>
+    <th class="text-right">Responses</th>
+    <th class="text-right">Filters</th>
+    <th class="text-right">Actions</th>
+  </tr>
+  <tr *ngFor="let operation of operations">
+    <td data-toggle="tooltip" data-placement="right" [attr.title]="operation.name">{{operation.name | truncateStringPipe:30 }}</td>
+    <td data-toggle="tooltip" data-placement="right" [attr.title]="operation.input_message">{{operation.input_message | truncateStringPipe:30 }}</td>
+    <td data-toggle="tooltip" data-placement="right" [attr.title]="operation.output_message">{{operation.output_message | truncateStringPipe:30 }}</td>
+    <td>
+      <span *ngIf="operation.responder == 'SIMPLE_MOCK_RESPONDER'" class="label label-primary">Simple Mock</span>
+      <span *ngIf="operation.responder == 'FILTER_MOCK_RESPONDER'" class="label label-success">Filter Mock</span>
+    </td>
+    <td class="text-right">
+      <kbd *ngIf="operation.responses.length == 0">None</kbd>
+      <a *ngIf="operation.responses.length > 0" [routerLink]="['/operation', operation.id, 'response']">{{operation.responses.length}}</a>
+    </td>
+    <td class="text-right">
+      <kbd *ngIf="operation.filters.length == 0">None</kbd>
+      <a *ngIf="operation.filters.length > 0" [routerLink]="['/operation', operation.id, 'filter']">{{operation.filters.length}}</a>
+    </td>
+    <td class="text-right">
+      <button class="btn btn-primary btn-sm" [routerLink]="['/operation', operation.id]">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+      </button>
+      <button class="btn btn-danger btn-sm" (click)="select(operation)" data-toggle="modal" data-target="#modalDelete">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      </button>
+    </td>
+  </tr>
+</table>
+<button class="btn btn-primary btn-sm" [routerLink]="['/operation', 'new']">
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+</button>
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDeleteLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modalDeleteLabel">Are you sure?</h4>
+      </div>
+      <div class="modal-body">
+        <p *ngIf="selectedOperation">Are you sure you want to delete the operation <strong>{{selectedOperation.name}}</strong>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="delete(selectedOperation)">Confirm</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

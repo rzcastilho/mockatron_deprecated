@@ -1,7 +1,19 @@
-.toolbar-icon {
-  padding: 0 14px;
+* {
+   font-size: 13px;
+   line-height: 1.5;
 }
 
-.fill-remaining {
-  flex: 1 1 auto;
+.method_get {
+  font-weight: bold;
+  color: green;
+}
+
+.method_post {
+  font-weight: bold;
+  color: orange;
+}
+
+.method_delete {
+  font-weight: bold;
+  color: red;
 }

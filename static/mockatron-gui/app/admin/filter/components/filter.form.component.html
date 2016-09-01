@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <h3>Filter</h3>
+    <form *ngIf="filter" role="form" #filterForm="ngForm">
+      <div class="form-group">
+        <label for="agent">Agent</label>
+        <select class="form-control" id="agent" required [(ngModel)]="filter.agent" name="agent" #agent="ngModel" (change)="selectAgent($event.target.value)">
+          <option *ngFor="let agent of agents" [value]="agent.id">{{agent.protocol}}://{{agent.host}}:{{agent.port}}{{agent.path}}</option>
+        </select>
+      </div>
+      <div *ngIf="selectedAgent && operations && operations.length > 0" class="form-group">
+        <label for="operation">Operation</label>
+        <select class="form-control" id="operation" required [(ngModel)]="filter.operation" name="operation" #operation="ngModel">
+          <option>None</option>
+          <option *ngFor="let operation of operations" [value]="operation.id">{{operation.name}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="label">Label</label>
+        <input type="text" class="form-control" placeholder="label" id="name" required [(ngModel)]="filter.label" name="label" #label="ngModel"/>
+        <div [hidden]="label.pristine || label.valid" class="alert alert-danger">Please, inform a label.</div>
+      </div>
+      <div class="form-group">
+        <label for="label">Priority</label>
+        <input type="text" class="form-control" placeholder="priority" id="name" required [(ngModel)]="filter.priority" name="priority" #priority="ngModel"/>
+        <div [hidden]="priority.pristine || priority.valid" class="alert alert-danger">Please, inform a priority.</div>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="enable" [(ngModel)]="filter.enable" name="enable" #enable="ngModel"> Enable?
+        </label>
+      </div>
+      <button class="btn btn-primary" [disabled]="!filterForm.form.valid" (click)="save(filter)">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Save
+      </button>
+      <button class="btn btn-default" [routerLink]="['/filter']">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+      </button>
+    </form>
+  </div>
+</div>

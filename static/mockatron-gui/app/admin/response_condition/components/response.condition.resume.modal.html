@@ -1,0 +1,89 @@
+<div class="modal fade" [id]="modalName" tabindex="-1" role="dialog" [attr.aria-labelledby]="modalName + 'Label'">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" [id]="modalName + 'Label'">Response Conditions</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table" *ngIf="response_conditions">
+          <tr>
+            <th>Field Type</th>
+            <th>Operator</th>
+            <th>Value</th>
+            <th class="text-right">Actions</th>
+          </tr>
+          <tr *ngFor="let response_condition of response_conditions">
+            <td><code>{{response_condition.field_type}}</code></td>
+            <td><code>{{response_condition.operator}}</code></td>
+            <td data-toggle="tooltip" data-placement="right" [attr.title]="response_condition.value"><code>{{response_condition.value | truncateStringPipe:50 }}</code></td>
+            <td class="text-right">
+              <button class="btn btn-primary btn-sm" [disabled]="edit_mode" (click)="edit(response_condition)">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+              </button>
+              <button class="btn btn-danger btn-sm" [disabled]="edit_mode" (click)="select(response_condition)" data-toggle="modal" data-target="#modalResponseConditionDelete">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+              </button>
+            </td>
+          </tr>
+        </table>
+        <button class="btn btn-primary btn-sm" [disabled]="edit_mode" (click)="create()">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>
+        <form *ngIf="current_response_condition && edit_mode" role="form" #responseConditionForm="ngForm">
+          <div class="form-group">
+            <label for="field_type">Field Type</label>
+            <select class="form-control" id="field_type" required [(ngModel)]="current_response_condition.field_type" name="field_type" #field_type="ngModel">
+              <option value="CONTENT">Content</option>
+              <option value="HEADER">HTTP Header</option>
+              <option value="QUERY_PARAM">Query Parameter</option>
+            </select>
+            <div [hidden]="field_type.pristine || field_type.valid" class="alert alert-danger">Please, inform a field type.</div>
+          </div>
+          <div class="form-group">
+            <label for="operator">Operator</label>
+            <select class="form-control" id="operator" required [(ngModel)]="current_response_condition.operator" name="operator" #operator="ngModel">
+              <option value="EQUALS">Equals</option>
+              <option value="CONTAINS">Contains</option>
+              <option value="STARTS_WITH">Starts With</option>
+              <option value="ENDS_WITH">Ends With</option>
+              <option value="REGEX">Regular Expression</option>
+            </select>
+            <div [hidden]="operator.pristine || operator.valid" class="alert alert-danger">Please, inform an operator.</div>
+          </div>
+          <div class="form-group">
+            <label for="value">Value</label>
+            <input type="text" class="form-control" placeholder="value" id="value" required [(ngModel)]="current_response_condition.value" name="value" #value="ngModel"/>
+            <div [hidden]="value.pristine || value.valid" class="alert alert-danger">Please, inform a value.</div>
+          </div>
+          <button type="button" class="btn btn-primary" [disabled]="!responseConditionForm.form.valid" (click)="save(current_response_condition)">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Save
+          </button>
+          <button type="button" class="btn btn-default" (click)="cancel()">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+          </button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalResponseConditionDelete" tabindex="-1" role="dialog" aria-labelledby="modalResponseConditionDeleteLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modalResponseConditionDeleteLabel">Are you sure?</h4>
+      </div>
+      <div class="modal-body">
+        <p *ngIf="current_response_condition">Are you sure you want to delete the response condition <strong>[{{current_response_condition.field_type}}] [{{current_response_condition.operator}}] [{{current_response_condition.value}}]</strong>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="delete(current_response_condition)">Confirm</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

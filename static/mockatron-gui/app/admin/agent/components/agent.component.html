@@ -1,6 +1,60 @@
-<md-card>
-  <md-toolbar>Agent</md-toolbar>
-  <md-card-content>
-    <p>Agents List</p>
-  </md-card-content>
-</md-card>
+<h3>Agents</h3>
+<table class="table">
+  <tr>
+    <th>Method</th>
+    <th>URL</th>
+    <th>Responder</th>
+    <th class="text-right">Operations</th>
+    <th class="text-right">Responses</th>
+    <th class="text-right">Filters</th>
+    <th class="text-right">Actions</th>
+  </tr>
+  <tr *ngFor="let agent of agents">
+    <td [class]="classMethod(agent)">{{agent.method}}</td>
+    <td>{{agent.protocol}}://{{agent.host}}:{{agent.port}}{{agent.path}}</td>
+    <td>
+      <span *ngIf="agent.responder == 'SIMPLE_MOCK_RESPONDER'" class="label label-primary">Simple Mock</span>
+      <span *ngIf="agent.responder == 'FILTER_MOCK_RESPONDER'" class="label label-success">Filter Mock</span>
+    </td>
+    <td class="text-right">
+      <kbd *ngIf="agent.operations.length == 0">None</kbd>
+      <a *ngIf="agent.operations.length > 0" [routerLink]="['/agent', agent.id, 'operation']">{{agent.operations.length}}</a>
+    </td>
+    <td class="text-right">
+      <kbd *ngIf="agent.responses.length == 0">None</kbd>
+      <a *ngIf="agent.responses.length > 0" [routerLink]="['/agent', agent.id, 'response']">{{agent.responses.length}}</a>
+    </td>
+    <td class="text-right">
+      <kbd *ngIf="agent.filters.length == 0">None</kbd>
+      <a *ngIf="agent.filters.length > 0" [routerLink]="['/agent', agent.id, 'filter']">{{agent.filters.length}}</a>
+    </td>
+    <td class="text-right">
+      <button class="btn btn-primary btn-sm" [routerLink]="['/agent', agent.id]">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+      </button>
+      <button class="btn btn-danger btn-sm" (click)="select(agent)" data-toggle="modal" data-target="#modalDelete">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      </button>
+    </td>
+  </tr>
+</table>
+<button class="btn btn-primary btn-sm" [routerLink]="['/agent', 'new']">
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+</button>
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDeleteLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modalDeleteLabel">Are you sure?</h4>
+      </div>
+      <div class="modal-body">
+        <p *ngIf="selectedAgent">Are you sure you want to delete the agent <strong>{{selectedAgent.protocol}}://{{selectedAgent.host}}:{{selectedAgent.port}}{{selectedAgent.path}}</strong>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="delete(selectedAgent)">Confirm</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

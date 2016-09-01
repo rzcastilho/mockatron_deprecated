@@ -20,7 +20,7 @@ var SigninComponent = (function () {
     }
     SigninComponent.prototype.signin = function (login) {
         var _this = this;
-        this.authService.login(login.username, login.password).subscribe(function (user) { return _this.router.navigate(['home']); }, function (error) { return _this.loginError = error; });
+        this.authService.login(login.username, login.password).subscribe(function (user) { return _this.router.navigate(['dashboard']); }, function (error) { return _this.loginError = error; });
     };
     SigninComponent = __decorate([
         core_1.Component({

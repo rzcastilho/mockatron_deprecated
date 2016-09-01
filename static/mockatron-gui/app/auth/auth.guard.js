@@ -17,11 +17,11 @@ var AuthGuard = (function () {
         this.router = router;
     }
     AuthGuard.prototype.canActivate = function (route, state) {
-        if (this.authService.isLoggedIn) {
+        if (this.authService.isLoggedIn()) {
             return true;
         }
         // Navigate to the login page
-        this.router.navigate(['/signin']);
+        this.router.navigate(['signin']);
         return false;
     };
     AuthGuard = __decorate([

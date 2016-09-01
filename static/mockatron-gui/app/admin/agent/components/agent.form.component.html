@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <h3>Agent</h3>
+    <form *ngIf="agent" role="form" #agentForm="ngForm">
+      <blockquote>
+        <p>URL Preview</p>
+        <footer>{{agent.protocol}}://{{agent.host}}:{{agent.port}}{{agent.path}}</footer>
+      </blockquote>
+      <div class="form-group">
+        <label for="protocol">Protocol</label>
+        <select class="form-control" id="protocol" required [(ngModel)]="agent.protocol" name="protocol" #protocol="ngModel">
+          <option value="http">HTTP</option>
+          <option value="https">HTTPS</option>
+        </select>
+        <div [hidden]="protocol.pristine || protocol.valid" class="alert alert-danger">Please, inform a protocol.</div>
+      </div>
+      <div class="form-group">
+        <label for="host">Host</label>
+        <input type="text" class="form-control" placeholder="host" id="host" required [(ngModel)]="agent.host" name="host" #host="ngModel"/>
+        <div [hidden]="host.pristine || host.valid" class="alert alert-danger">Please, inform a host.</div>
+      </div>
+      <div class="form-group">
+        <label for="port">Port</label>
+        <input type="text" class="form-control" placeholder="port" id="port" pattern="([1-9][0-9]{0,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])" required [(ngModel)]="agent.port" name="port" #port="ngModel"/>
+        <div [hidden]="port.pristine || port.valid" class="alert alert-danger">Please, inform a valid port value.</div>
+      </div>
+      <div class="form-group">
+        <label for="path">Path</label>
+        <input type="text" class="form-control" placeholder="path" id="path" pattern="/([0-9a-zA-Z-_]+/?)+" required [(ngModel)]="agent.path" name="path" #path="ngModel"/>
+        <div [hidden]="path.pristine || path.valid" class="alert alert-danger">Please, inform a valid path value.</div>
+      </div>
+      <div class="form-group">
+        <label for="method">Method</label>
+        <select class="form-control" id="method" required [(ngModel)]="agent.method" name="method" #method="ngModel">
+          <option value="POST">POST</option>
+          <option value="GET">GET</option>
+          <option value="PUT">PUT</option>
+          <option value="DELETE">DELETE</option>
+          <option value="CONNECT">CONNECT</option>
+          <option value="HEAD">HEAD</option>
+          <option value="OPTIONS">OPTIONS</option>
+          <option value="PATCH">PATCH</option>
+          <option value="TRACE">TRACE</option>
+        </select>
+        <div [hidden]="method.pristine || method.valid" class="alert alert-danger">Please, inform a method.</div>
+      </div>
+      <div class="form-group">
+        <label for="content_type">Content Type</label>
+        <input type="text" class="form-control" placeholder="content type" id="content_type" required [(ngModel)]="agent.content_type" name="content_type" #content_type="ngModel"/>
+        <div [hidden]="content_type.pristine || content_type.valid" class="alert alert-danger">Please, inform a content type.</div>
+      </div>
+      <div class="form-group">
+        <label for="responder">Responder</label>
+        <select class="form-control" id="responder" required [(ngModel)]="agent.responder" name="responder" #responder="ngModel">
+          <option value="SIMPLE_MOCK_RESPONDER">Simple Mock</option>
+          <option value="FILTER_MOCK_RESPONDER">Filter Mock</option>
+        </select>
+        <div [hidden]="responder.pristine || responder.valid" class="alert alert-danger">Please, inform a responder.</div>
+      </div>
+      <button class="btn btn-primary" [disabled]="!agentForm.form.valid" (click)="save(agent)">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Save
+      </button>
+      <button class="btn btn-default" [routerLink]="['/agent']">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+      </button>
+    </form>
+  </div>
+</div>
