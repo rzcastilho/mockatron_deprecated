@@ -9,21 +9,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var resume_service_1 = require('../services/resume.service');
 var DashboardComponent = (function () {
-    function DashboardComponent(resumeService) {
-        this.resumeService = resumeService;
+    function DashboardComponent() {
     }
-    DashboardComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this.resumeService.resume().subscribe(function (resume) { return _this.resume = resume; }, function (error) { return console.log(error); });
-    };
     DashboardComponent = __decorate([
         core_1.Component({
             selector: 'dashboard',
             templateUrl: 'app/pages/dashboard/dashboard.component.html'
         }), 
-        __metadata('design:paramtypes', [resume_service_1.ResumeService])
+        __metadata('design:paramtypes', [])
     ], DashboardComponent);
     return DashboardComponent;
 }());

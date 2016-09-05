@@ -1,3 +1,7 @@
+# Important Content Types
+CONTENT_TYPE_JSON = 'application/json'
+CONTENT_TYPE_XML = 'text/xml'
+
 # Choices for Models
 SIMPLE_MOCK_RESPONDER = ('SIMPLE_MOCK_RESPONDER', 'Simple Mock Responder')
 FILTER_MOCK_RESPONDER = ('FILTER_MOCK_RESPONDER', 'Filter Mock Responder')

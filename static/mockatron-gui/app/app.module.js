@@ -26,8 +26,8 @@ var response_component_1 = require('./admin/response/components/response.compone
 var response_form_component_1 = require('./admin/response/components/response.form.component');
 var filter_component_1 = require('./admin/filter/components/filter.component');
 var filter_form_component_1 = require('./admin/filter/components/filter.form.component');
-var request_condition_resume_modal_1 = require('./admin/request_condition/components/request.condition.resume.modal');
-var response_condition_resume_modal_1 = require('./admin/response_condition/components/response.condition.resume.modal');
+var request_condition_editor_1 = require('./admin/request_condition/components/request.condition.editor');
+var response_condition_editor_1 = require('./admin/response_condition/components/response.condition.editor');
 var AppModule = (function () {
     function AppModule() {
     }
@@ -47,8 +47,8 @@ var AppModule = (function () {
                 response_form_component_1.ResponseFormComponent,
                 filter_component_1.FilterComponent,
                 filter_form_component_1.FilterFormComponent,
-                request_condition_resume_modal_1.RequestConditionResumeModalComponent,
-                response_condition_resume_modal_1.ResponseConditionResumeModalComponent
+                request_condition_editor_1.RequestConditionEditorComponent,
+                response_condition_editor_1.ResponseConditionEditorComponent
             ],
             imports: [
                 platform_browser_1.BrowserModule,

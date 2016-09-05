@@ -5,15 +5,20 @@
 
 .method_get {
   font-weight: bold;
-  color: green;
+  color: blue;
 }
 
 .method_post {
   font-weight: bold;
-  color: orange;
+  color: green;
 }
 
 .method_delete {
   font-weight: bold;
   color: red;
+}
+
+.method_put {
+  font-weight: bold;
+  color: orange;
 }

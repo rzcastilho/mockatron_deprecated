@@ -10,8 +10,7 @@ var routes = [
 exports.appRoutingProviders = [
     common_resources_1.commonProviders,
     auth_routing_1.authProviders,
-    admin_routing_1.adminProviders,
-    pages_routing_1.pagesProviders
+    admin_routing_1.adminProviders
 ];
 exports.routing = router_1.RouterModule.forRoot(routes, { useHash: true });
 //# sourceMappingURL=app.routing.js.map

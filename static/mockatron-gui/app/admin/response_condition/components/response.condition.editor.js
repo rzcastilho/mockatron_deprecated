@@ -11,39 +11,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var response_condition_service_1 = require('../services/response.condition.service');
 var truncate_string_pipe_1 = require('../../../common/pipes/truncate.string.pipe');
-var ResponseConditionResumeModalComponent = (function () {
-    function ResponseConditionResumeModalComponent(responseConditionService) {
+var ResponseConditionEditorComponent = (function () {
+    function ResponseConditionEditorComponent(responseConditionService) {
         this.responseConditionService = responseConditionService;
         this.response_conditions = [];
         this.edit_mode = false;
     }
-    ResponseConditionResumeModalComponent.prototype.toggleMode = function () {
+    ResponseConditionEditorComponent.prototype.toggleMode = function () {
         this.edit_mode = !this.edit_mode;
     };
-    ResponseConditionResumeModalComponent.prototype.refreshData = function () {
+    ResponseConditionEditorComponent.prototype.refreshData = function () {
         var _this = this;
         this.responseConditionService.getByFilter(this.filterId).subscribe(function (response_conditions) { return _this.response_conditions = response_conditions; }, function (error) { return console.log(error); });
     };
-    ResponseConditionResumeModalComponent.prototype.ngOnInit = function () {
+    ResponseConditionEditorComponent.prototype.ngOnInit = function () {
         this.refreshData();
     };
-    ResponseConditionResumeModalComponent.prototype.select = function (response_condition) {
+    ResponseConditionEditorComponent.prototype.select = function (response_condition) {
         this.current_response_condition = response_condition;
     };
-    ResponseConditionResumeModalComponent.prototype.edit = function (response_condition) {
+    ResponseConditionEditorComponent.prototype.edit = function (response_condition) {
         this.current_response_condition = response_condition;
         this.toggleMode();
     };
-    ResponseConditionResumeModalComponent.prototype.create = function () {
+    ResponseConditionEditorComponent.prototype.create = function () {
         this.current_response_condition = {};
         this.toggleMode();
     };
-    ResponseConditionResumeModalComponent.prototype.cancel = function () {
+    ResponseConditionEditorComponent.prototype.cancel = function () {
         this.current_response_condition = null;
         this.toggleMode();
         return null;
     };
-    ResponseConditionResumeModalComponent.prototype.save = function (response_condition) {
+    ResponseConditionEditorComponent.prototype.save = function (response_condition) {
         var _this = this;
         response_condition.filter = this.filterId;
         if (response_condition.id) {
@@ -53,27 +53,27 @@ var ResponseConditionResumeModalComponent = (function () {
             this.responseConditionService.create(response_condition).subscribe(function (response_condition) { return _this.refreshData(); }, function (error) { return console.log(); }, function () { return _this.toggleMode(); });
         }
     };
-    ResponseConditionResumeModalComponent.prototype.delete = function (response_condition) {
+    ResponseConditionEditorComponent.prototype.delete = function (response_condition) {
         var _this = this;
         this.responseConditionService.delete(response_condition).subscribe(function (res) { return _this.refreshData(); }, function (error) { return console.log(error); });
     };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Number)
-    ], ResponseConditionResumeModalComponent.prototype, "filterId", void 0);
+    ], ResponseConditionEditorComponent.prototype, "filterId", void 0);
     __decorate([
         core_1.Input(), 
         __metadata('design:type', String)
-    ], ResponseConditionResumeModalComponent.prototype, "modalName", void 0);
-    ResponseConditionResumeModalComponent = __decorate([
+    ], ResponseConditionEditorComponent.prototype, "modalName", void 0);
+    ResponseConditionEditorComponent = __decorate([
         core_1.Component({
-            selector: 'response-condition-resume-modal',
+            selector: 'response-condition-editor',
             pipes: [truncate_string_pipe_1.TruncateStringPipe],
-            templateUrl: 'app/admin/response_condition/components/response.condition.resume.modal.html'
+            templateUrl: 'app/admin/response_condition/components/response.condition.editor.html'
         }), 
         __metadata('design:paramtypes', [response_condition_service_1.ResponseConditionService])
-    ], ResponseConditionResumeModalComponent);
-    return ResponseConditionResumeModalComponent;
+    ], ResponseConditionEditorComponent);
+    return ResponseConditionEditorComponent;
 }());
-exports.ResponseConditionResumeModalComponent = ResponseConditionResumeModalComponent;
-//# sourceMappingURL=response.condition.resume.modal.js.map
+exports.ResponseConditionEditorComponent = ResponseConditionEditorComponent;
+//# sourceMappingURL=response.condition.editor.js.map

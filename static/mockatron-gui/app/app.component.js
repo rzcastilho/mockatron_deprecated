@@ -11,11 +11,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var auth_service_1 = require('./auth/services/auth.service');
+var resume_service_1 = require('./common/services/resume.service');
 var AppComponent = (function () {
-    function AppComponent(authService, router) {
+    function AppComponent(authService, router, resumeService) {
         this.authService = authService;
         this.router = router;
+        this.resumeService = resumeService;
     }
+    AppComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.resumeService.resume().subscribe(function (resume) { return _this.resume = resume; }, function (error) { return console.log(error); });
+    };
     AppComponent.prototype.logout = function () {
         this.authService.logout();
         this.router.navigate(['signin']);
@@ -28,7 +34,7 @@ var AppComponent = (function () {
             selector: 'mockatron-app',
             templateUrl: 'app/app.component.html'
         }), 
-        __metadata('design:paramtypes', [auth_service_1.AuthService, router_1.Router])
+        __metadata('design:paramtypes', [auth_service_1.AuthService, router_1.Router, resume_service_1.ResumeService])
     ], AppComponent);
     return AppComponent;
 }());

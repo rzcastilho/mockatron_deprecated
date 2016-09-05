@@ -3,11 +3,11 @@ import {RequestConditionService} from '../services/request.condition.service';
 import {TruncateStringPipe} from '../../../common/pipes/truncate.string.pipe';
 
 @Component({
-  selector: 'request-condition-resume-modal',
+  selector: 'request-condition-editor',
   pipes: [TruncateStringPipe],
-  templateUrl: 'app/admin/request_condition/components/request.condition.resume.modal.html'
+  templateUrl: 'app/admin/request_condition/components/request.condition.editor.html'
 })
-export class RequestConditionResumeModalComponent {
+export class RequestConditionEditorComponent {
 
   @Input() filterId: number;
   @Input() modalName: string;

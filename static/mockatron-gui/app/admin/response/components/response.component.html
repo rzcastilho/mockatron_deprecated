@@ -3,14 +3,14 @@
   <tr>
     <th>Owner</th>
     <th>Label</th>
-    <th class="text-right">HTTP Code</th>
-    <th class="text-right">Enabled?</th>
+    <th class="text-center">HTTP Code</th>
+    <th class="text-center">Enabled?</th>
     <th class="text-right">Actions</th>
   </tr>
   <tr *ngFor="let response of responses">
     <td>
-      <span *ngIf="response.agent" class="label label-success">Agent</span>
-      <span *ngIf="response.operation" class="label label-primary">Operation</span>
+      <a *ngIf="response.agent" [routerLink]="['/agent', response.agent]"><span class="label label-success">Agent</span></a>
+      <a *ngIf="response.operation" [routerLink]="['/operation', response.operation]"><span class="label label-primary">Operation</span></a>
     </td>
     <td>
       {{response.label}}
@@ -34,11 +34,11 @@
         </div>
       </div>
     </td>
-    <td class="text-right">
+    <td class="text-center">
       <span *ngIf="response.http_code <= 399" class="label label-success">{{response.http_code}}</span>
       <span *ngIf="response.http_code >= 400" class="label label-danger">{{response.http_code}}</span>
     </td>
-    <td class="text-right">
+    <td class="text-center">
       <span *ngIf="response.enable == true" class="label label-success">Yes</span>
       <span *ngIf="response.enable == false" class="label label-danger">No</span>
     </td>

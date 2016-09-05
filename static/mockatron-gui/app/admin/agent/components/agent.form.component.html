@@ -26,7 +26,7 @@
       </div>
       <div class="form-group">
         <label for="path">Path</label>
-        <input type="text" class="form-control" placeholder="path" id="path" pattern="/([0-9a-zA-Z-_]+/?)+" required [(ngModel)]="agent.path" name="path" #path="ngModel"/>
+        <input type="text" class="form-control" placeholder="path" id="path" pattern="/([0-9a-zA-Z-_\]\[\+]+/?)+" required [(ngModel)]="agent.path" name="path" #path="ngModel"/>
         <div [hidden]="path.pristine || path.valid" class="alert alert-danger">Please, inform a valid path value.</div>
       </div>
       <div class="form-group">

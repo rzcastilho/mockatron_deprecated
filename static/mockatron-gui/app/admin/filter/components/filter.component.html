@@ -3,24 +3,28 @@
   <tr>
     <th>Owner</th>
     <th>Label</th>
-    <th class="text-right">Request Conditions</th>
-    <th class="text-right">Response Conditions</th>
-    <th class="text-right">Priority</th>
-    <th class="text-right">Enabled?</th>
+    <th class="text-center">Request Conditions</th>
+    <th class="text-center">Response Conditions</th>
+    <th class="text-center">Priority</th>
+    <th class="text-center">Enabled?</th>
     <th class="text-right">Actions</th>
   </tr>
   <tr *ngFor="let filter of filters">
     <td>
-      <span *ngIf="filter.agent" class="label label-success">Agent</span>
-      <span *ngIf="filter.operation" class="label label-primary">Operation</span>
+      <a *ngIf="filter.agent" [routerLink]="['/agent', filter.agent]"><span class="label label-success">Agent</span></a>
+      <a *ngIf="filter.operation" [routerLink]="['/operation', filter.operation]"><span class="label label-primary">Operation</span></a>
     </td>
     <td>{{filter.label}}</td>
-    <td class="text-right"><a href="#" data-toggle="modal" [attr.data-target]="'#requestConditions' + filter.id">{{filter.request_conditions.length}}</a></td>
-    <td class="text-right"><a href="#" data-toggle="modal" [attr.data-target]="'#responseConditions' + filter.id">{{filter.response_conditions.length}}</a></td>
-    <td class="text-right">
-      <kbd>{{filter.priority}}</kbd>
+    <td class="text-center">
+      <kbd *ngIf="filter.request_conditions.length == 0">None</kbd>
+      <a *ngIf="filter.request_conditions.length > 0" href="#" data-toggle="modal" [attr.data-target]="'#requestConditions' + filter.id"><span class="label label-primary">{{filter.request_conditions.length}}</span></a>
     </td>
-    <td class="text-right">
+    <td class="text-center">
+      <kbd *ngIf="filter.response_conditions.length == 0">None</kbd>
+      <a *ngIf="filter.response_conditions.length > 0" href="#" data-toggle="modal" [attr.data-target]="'#responseConditions' + filter.id"><span class="label label-primary">{{filter.response_conditions.length}}</span></a>
+    </td>
+    <td class="text-center"><span class="label label-info">{{filter.priority}}</span></td>
+    <td class="text-center">
       <span *ngIf="filter.enable == true" class="label label-success">Yes</span>
       <span *ngIf="filter.enable == false" class="label label-danger">No</span>
     </td>
@@ -32,8 +36,8 @@
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
       </button>
     </td>
-    <request-condition-resume-modal [filterId]="filter.id" [modalName]="'requestConditions' + filter.id"></request-condition-resume-modal>
-    <response-condition-resume-modal [filterId]="filter.id" [modalName]="'responseConditions' + filter.id"></response-condition-resume-modal>
+    <request-condition-editor [filterId]="filter.id" [modalName]="'requestConditions' + filter.id"></request-condition-editor>
+    <response-condition-editor [filterId]="filter.id" [modalName]="'responseConditions' + filter.id"></response-condition-editor>
   </tr>
 </table>
 <button class="btn btn-primary btn-sm" [routerLink]="['/filter', 'new']">

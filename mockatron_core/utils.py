@@ -28,7 +28,7 @@ def extract_agent_data_from_request(request):
 def create_and_return_agent(agent_data):
     agent = Agent(protocol=agent_data['protocol'], host=agent_data['host'], port=agent_data['port'], path=agent_data['path'], method=agent_data['method'], content_type=agent_data['content_type'])
     agent.save()
-    if agent.content_type == 'text/xml':
+    if agent.content_type == CONTENT_TYPE_XML:
         try:
             req = urllib.request.Request(agent.wsdl_url())
             content = urllib.request.urlopen(req).read()
@@ -62,10 +62,10 @@ def create_and_return_agent(agent_data):
 
 def create_default_response(provider):
     parent_key = re.sub(r'class (.+\.)+', '', re.sub('[\'<>]', '', str(type(provider)))).lower()
-    if provider.get_content_type() == 'text/xml':
+    if provider.get_content_type() == CONTENT_TYPE_XML:
         default_label = XML_DEFAULT_LABEL
         default_response = XML_DEFAULT_RESPONSE
-    elif provider.get_content_type() == 'application/json':
+    elif provider.get_content_type() == CONTENT_TYPE_JSON:
         default_label = JSON_DEFAULT_LABEL
         default_response = JSON_DEFAULT_RESPONSE
     else:
@@ -94,10 +94,22 @@ def responder(agent, request):
     context['request'] = request
     if request.body != b'':
         body = request.body.decode(encoding='UTF-8')
-        if agent.content_type == 'text/xml':
+        if agent.content_type == CONTENT_TYPE_XML:
             context['body'] = xmltodict.parse(body, process_namespaces=True)
-        elif agent.content_type == 'application/json':
+        elif agent.content_type == CONTENT_TYPE_JSON:
             context['body'] = json.loads(body)
         else:
             context['body'] = body
     return HttpResponse(response.template().render(context), status=response.http_code, content_type=agent.content_type)
+
+def json_agent_locator(agent_data):
+    url = '{}://{}:{}{}'.format(agent_data['protocol'], agent_data['host'], agent_data['port'], agent_data['path'])
+    agents = Agent.objects.filter(method=agent_data['method'], protocol=agent_data['protocol'], host=agent_data['host'], port=agent_data['port'])
+    path_list = agent_data['path'].split('/')
+    while len(path_list) > 1:
+        agents_list = agents.filter(path__startswith='/'.join(path_list))
+        for a in agents_list:
+            if a.match(url):
+                return a
+        path_list.pop()
+    return None

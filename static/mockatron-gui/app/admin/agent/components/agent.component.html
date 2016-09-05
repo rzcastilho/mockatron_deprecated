@@ -3,30 +3,30 @@
   <tr>
     <th>Method</th>
     <th>URL</th>
-    <th>Responder</th>
-    <th class="text-right">Operations</th>
-    <th class="text-right">Responses</th>
-    <th class="text-right">Filters</th>
+    <th class="text-center">Responder</th>
+    <th class="text-center">Operations</th>
+    <th class="text-center">Responses</th>
+    <th class="text-center">Filters</th>
     <th class="text-right">Actions</th>
   </tr>
   <tr *ngFor="let agent of agents">
     <td [class]="classMethod(agent)">{{agent.method}}</td>
     <td>{{agent.protocol}}://{{agent.host}}:{{agent.port}}{{agent.path}}</td>
-    <td>
+    <td class="text-center">
       <span *ngIf="agent.responder == 'SIMPLE_MOCK_RESPONDER'" class="label label-primary">Simple Mock</span>
       <span *ngIf="agent.responder == 'FILTER_MOCK_RESPONDER'" class="label label-success">Filter Mock</span>
     </td>
-    <td class="text-right">
+    <td class="text-center">
       <kbd *ngIf="agent.operations.length == 0">None</kbd>
-      <a *ngIf="agent.operations.length > 0" [routerLink]="['/agent', agent.id, 'operation']">{{agent.operations.length}}</a>
+      <a *ngIf="agent.operations.length > 0" [routerLink]="['/agent', agent.id, 'operation']"><span class="label label-primary">{{agent.operations.length}}</span></a>
     </td>
-    <td class="text-right">
+    <td class="text-center">
       <kbd *ngIf="agent.responses.length == 0">None</kbd>
-      <a *ngIf="agent.responses.length > 0" [routerLink]="['/agent', agent.id, 'response']">{{agent.responses.length}}</a>
+      <a *ngIf="agent.responses.length > 0" [routerLink]="['/agent', agent.id, 'response']"><span class="label label-primary">{{agent.responses.length}}</span></a>
     </td>
-    <td class="text-right">
+    <td class="text-center">
       <kbd *ngIf="agent.filters.length == 0">None</kbd>
-      <a *ngIf="agent.filters.length > 0" [routerLink]="['/agent', agent.id, 'filter']">{{agent.filters.length}}</a>
+      <a *ngIf="agent.filters.length > 0" [routerLink]="['/agent', agent.id, 'filter']"><span class="label label-primary">{{agent.filters.length}}</span></a>
     </td>
     <td class="text-right">
       <button class="btn btn-primary btn-sm" [routerLink]="['/agent', agent.id]">

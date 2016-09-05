@@ -4,7 +4,7 @@
     <th>Name</th>
     <th>Input Message</th>
     <th>Output Message</th>
-    <th>Responder</th>
+    <th class="text-center">Responder</th>
     <th class="text-right">Responses</th>
     <th class="text-right">Filters</th>
     <th class="text-right">Actions</th>
@@ -13,17 +13,17 @@
     <td data-toggle="tooltip" data-placement="right" [attr.title]="operation.name">{{operation.name | truncateStringPipe:30 }}</td>
     <td data-toggle="tooltip" data-placement="right" [attr.title]="operation.input_message">{{operation.input_message | truncateStringPipe:30 }}</td>
     <td data-toggle="tooltip" data-placement="right" [attr.title]="operation.output_message">{{operation.output_message | truncateStringPipe:30 }}</td>
-    <td>
+    <td class="text-center">
       <span *ngIf="operation.responder == 'SIMPLE_MOCK_RESPONDER'" class="label label-primary">Simple Mock</span>
       <span *ngIf="operation.responder == 'FILTER_MOCK_RESPONDER'" class="label label-success">Filter Mock</span>
     </td>
-    <td class="text-right">
+    <td class="text-center">
       <kbd *ngIf="operation.responses.length == 0">None</kbd>
-      <a *ngIf="operation.responses.length > 0" [routerLink]="['/operation', operation.id, 'response']">{{operation.responses.length}}</a>
+      <a *ngIf="operation.responses.length > 0" [routerLink]="['/operation', operation.id, 'response']"><span class="label label-primary">{{operation.responses.length}}</span></a>
     </td>
-    <td class="text-right">
+    <td class="text-center">
       <kbd *ngIf="operation.filters.length == 0">None</kbd>
-      <a *ngIf="operation.filters.length > 0" [routerLink]="['/operation', operation.id, 'filter']">{{operation.filters.length}}</a>
+      <a *ngIf="operation.filters.length > 0" [routerLink]="['/operation', operation.id, 'filter']"><span class="label label-primary">{{operation.filters.length}}</span></a>
     </td>
     <td class="text-right">
       <button class="btn btn-primary btn-sm" [routerLink]="['/operation', operation.id]">

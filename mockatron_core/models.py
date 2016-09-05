@@ -21,7 +21,7 @@ class Agent(models.Model):
         unique_together = ('protocol', 'host', 'port', 'path', 'method')
 
     def __str__(self):
-        return '[{}] {}://{}:{}{}'.format(self.method, self.protocol, self.host, self.port, self.path)
+        return '[{}] {}'.format(self.method, self.url())
 
     def hash(self):
         return hashlib.md5(str(self).encode('utf-8')).hexdigest()
@@ -29,11 +29,17 @@ class Agent(models.Model):
     def get_content_type(self):
         return self.content_type
 
+    def url(self):
+        return '{}://{}:{}{}'.format(self.protocol, self.host, self.port, self.path)
+
     def wsdl_url(self):
-        if self.content_type == 'text/xml':
-            return '{}://{}:{}{}?wsdl'.format(self.protocol, self.host, self.port, self.path)
+        if self.content_type == CONTENT_TYPE_XML:
+            return self.url() + '?wsdl'
         else:
-            raise Exception('There is no WSDL for Agent when content-type is different than text/xml')
+            raise Exception('There is no WSDL for Agent when content-type is different than {}'.format(CONTENT_TYPE_XML))
+
+    def match(self, url):
+        return re.match(self.url() + r'$', url) != None
 
 
 class Operation(models.Model):
@@ -95,7 +101,7 @@ class Filter(models.Model):
     enable = models.BooleanField(default=True)
 
     class Meta:
-        ordering = ['priority']
+        ordering = ['agent_id', 'priority']
 
     def __str__(self):
         return '{} {} [{}] {}'.format(self.label, self.request_conditions.all(), self.priority, self.agent)
@@ -118,7 +124,7 @@ class Filter(models.Model):
             elif c.field_type == 'HEADER':
                 input_value = request.META[c.header_or_query_param]
             elif c.field_type == 'QUERY_PARAM':
-                input_value = request.GET[c.header_or_query_param] if len(request.GET) > len(request.GET) else request.POST[c.header_or_query_param]
+                input_value = request.GET[c.header_or_query_param] if len(request.GET) > len(request.POST) else request.POST[c.header_or_query_param]
 
             # Return according with operator
             if c.operator == 'EQUALS':
@@ -130,15 +136,12 @@ class Filter(models.Model):
             elif c.operator == 'ENDSWITH':
                 result = input_value.endswith(c.value)
             elif c.operator == 'REGEX':
-                print(c.value)
                 regex = re.compile(c.value)
-                print(regex)
                 result = len(regex.findall(input_value)) > 0
 
             if not result:
                 return result
 
-        print(result)
         return result
 
 class Condition(models.Model):

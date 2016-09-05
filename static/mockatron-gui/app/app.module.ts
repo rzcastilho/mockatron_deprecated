@@ -18,8 +18,8 @@ import {ResponseComponent} from './admin/response/components/response.component'
 import {ResponseFormComponent} from './admin/response/components/response.form.component';
 import {FilterComponent} from './admin/filter/components/filter.component';
 import {FilterFormComponent} from './admin/filter/components/filter.form.component';
-import {RequestConditionResumeModalComponent} from './admin/request_condition/components/request.condition.resume.modal';
-import {ResponseConditionResumeModalComponent} from './admin/response_condition/components/response.condition.resume.modal';
+import {RequestConditionEditorComponent} from './admin/request_condition/components/request.condition.editor';
+import {ResponseConditionEditorComponent} from './admin/response_condition/components/response.condition.editor';
 
 @NgModule({
   declarations: [
@@ -36,8 +36,8 @@ import {ResponseConditionResumeModalComponent} from './admin/response_condition/
     ResponseFormComponent,
     FilterComponent,
     FilterFormComponent,
-    RequestConditionResumeModalComponent,
-    ResponseConditionResumeModalComponent
+    RequestConditionEditorComponent,
+    ResponseConditionEditorComponent
   ],
   imports: [
     BrowserModule,

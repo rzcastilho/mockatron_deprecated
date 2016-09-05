@@ -18,11 +18,12 @@ class Resume(APIView):
         er2 = EntityResume("operation", "Operations", Operation.objects.count())
         er3 = EntityResume("filter", "Filters", Filter.objects.count())
         er4 = EntityResume("response", "Responses", ResponseModel.objects.count())
-        er5 = EntityResume("request_condition", "Request Conditions", RequestCondition.objects.count())
-        er6 = EntityResume("response_condition", "Response Conditions", ResponseCondition.objects.count())
+        #er5 = EntityResume("request_condition", "Request Conditions", RequestCondition.objects.count())
+        #er6 = EntityResume("response_condition", "Response Conditions", ResponseCondition.objects.count())
         response = Response()
         response['Content-Type'] = 'application/json'
-        response.content = json.dumps([er1, er2, er3, er4, er5, er6], default=lambda o: o.__dict__, indent=4)
+        #response.content = json.dumps([er1, er2, er3, er4, er5, er6], default=lambda o: o.__dict__, indent=4)
+        response.content = json.dumps([er1, er2, er3, er4], default=lambda o: o.__dict__, indent=4)
         return response
 
 class SignUp(APIView):
