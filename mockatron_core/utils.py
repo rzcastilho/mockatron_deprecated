@@ -7,7 +7,9 @@ from .classes import *
 
 from xml.etree import ElementTree
 
-import hashlib, json, xmltodict, re, urllib.request
+import hashlib, json, xmltodict, re, urllib.request, logging
+
+logger = logging.getLogger("django")
 
 def extract_agent_data_from_request(request):
     result = {}
@@ -76,9 +78,11 @@ def create_default_response(provider):
     response.save()
 
 def responder(agent, request):
+    logger.debug("Starting responder...")
     response_method = None
 
     # Evaluate request against Operations, if exists
+    logger.debug("Evaluate request against operations to get response method...")
     if agent.operations.count() > 0:
         for operation in agent.operations.all():
             if operation.belongs_to(request):
@@ -86,12 +90,16 @@ def responder(agent, request):
                 break
 
     # Gets response_method based on Agent, if no one Operation matchs request before
+    logger.debug("Get response method based on agent, if no one operation matchs request...")
     if response_method == None:
         response_method = MockResponderFactory.get_mock_responder(agent)
 
+    logger.debug("Get response based on mock responder type...")
     response = response_method.get() if isinstance(response_method, SimpleMockResponder) else response_method.get(request)
     context = Context()
     context['request'] = request
+
+    logger.debug("Build response based on agent content type...")
     if request.body != b'':
         body = request.body.decode(encoding='UTF-8')
         if agent.content_type == CONTENT_TYPE_XML:
@@ -100,6 +108,8 @@ def responder(agent, request):
             context['body'] = json.loads(body)
         else:
             context['body'] = body
+
+    logger.debug("Replies apllying django template...")
     return HttpResponse(response.template().render(context), status=response.http_code, content_type=agent.content_type)
 
 def json_agent_locator(agent_data):

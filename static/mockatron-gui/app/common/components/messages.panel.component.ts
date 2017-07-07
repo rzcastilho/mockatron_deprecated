@@ -1,12 +1,10 @@
 import {Component} from '@angular/core';
 import {Message} from '../models/message';
 import {MessageType} from '../models/message.type';
-import {FilterMessageTypePipe} from '../pipes/filter.message.type.pipe';
 import {MessageService} from '../services/message.service';
 
 @Component({
   selector: 'messages-panel',
-  pipes: [FilterMessageTypePipe],
   template: `
     <div class="alert alert-success" role="alert" *ngIf="existsMessageType(messageType.Success)">
       <button type="button" class="close" aria-label="Close" (click)="dismissMessages(messageType.Success)"><span aria-hidden="true">&times;</span></button>

@@ -3,6 +3,10 @@ from django.core.cache import cache
 
 from .constants import *
 
+import logging
+
+logger = logging.getLogger("django")
+
 class BaseMockResponder:
     def __init__(self, responses):
         self.responses = responses
@@ -62,10 +66,14 @@ class FilterMockResponder:
 class MockResponderFactory:
     @staticmethod
     def get_mock_responder(provider):
+        logger.debug("Starting get mock responder from MockResponderFactory class...")
         response_method = cache.get(provider.hash())
         if response_method != None:
+            logger.debug("Getting responder from cache...")
             return response_method
         if provider.responder == FILTER_MOCK_RESPONDER[0] and provider.filters.all().count() > 0:
+            logger.debug("Creating FilterMockResponder...")
             return FilterMockResponder(provider)
         else:
+            logger.debug("Creating SimpleMockResponder...")
             return SimpleMockResponder(provider)

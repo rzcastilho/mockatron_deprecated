@@ -129,6 +129,8 @@ class Filter(models.Model):
             # Return according with operator
             if c.operator == 'EQUALS':
                 result = c.value == input_value
+            elif c.operator == 'NOTEQUALS':
+                result = c.value != input_value
             elif c.operator == 'CONTAINS':
                 result = c.value in input_value
             elif c.operator == 'STARTSWITH':

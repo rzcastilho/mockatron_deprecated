@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var response_condition_service_1 = require('../services/response.condition.service');
-var truncate_string_pipe_1 = require('../../../common/pipes/truncate.string.pipe');
 var ResponseConditionEditorComponent = (function () {
     function ResponseConditionEditorComponent(responseConditionService) {
         this.responseConditionService = responseConditionService;
@@ -68,7 +67,6 @@ var ResponseConditionEditorComponent = (function () {
     ResponseConditionEditorComponent = __decorate([
         core_1.Component({
             selector: 'response-condition-editor',
-            pipes: [truncate_string_pipe_1.TruncateStringPipe],
             templateUrl: 'app/admin/response_condition/components/response.condition.editor.html'
         }), 
         __metadata('design:paramtypes', [response_condition_service_1.ResponseConditionService])

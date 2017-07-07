@@ -1,10 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RequestConditionService} from '../services/request.condition.service';
-import {TruncateStringPipe} from '../../../common/pipes/truncate.string.pipe';
 
 @Component({
   selector: 'request-condition-editor',
-  pipes: [TruncateStringPipe],
   templateUrl: 'app/admin/request_condition/components/request.condition.editor.html'
 })
 export class RequestConditionEditorComponent {

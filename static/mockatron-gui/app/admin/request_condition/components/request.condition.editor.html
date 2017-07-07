@@ -54,6 +54,7 @@
                 <label for="operator">Operator</label>
                 <select class="form-control" id="operator" required [(ngModel)]="current_request_condition.operator" name="operator" #operator="ngModel">
                   <option value="EQUALS">Equals</option>
+                  <option value="NOTEQUALS">Not Equals</option>
                   <option value="CONTAINS">Contains</option>
                   <option value="STARTSWITH">Starts With</option>
                   <option value="ENDSWITH">Ends With</option>

@@ -1,13 +1,11 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {TruncateStringPipe} from '../../../common/pipes/truncate.string.pipe';
 import {OperationService} from '../services/operation.service';
 import {Subscription} from 'rxjs/Subscription';
 import {MessageService} from '../../../common/services/message.service';
 
 @Component({
   selector: 'operation',
-  pipes: [TruncateStringPipe],
   templateUrl: 'app/admin/operation/components/operation.component.html'
 })
 export class OperationComponent {

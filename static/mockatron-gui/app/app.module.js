@@ -28,6 +28,8 @@ var filter_component_1 = require('./admin/filter/components/filter.component');
 var filter_form_component_1 = require('./admin/filter/components/filter.form.component');
 var request_condition_editor_1 = require('./admin/request_condition/components/request.condition.editor');
 var response_condition_editor_1 = require('./admin/response_condition/components/response.condition.editor');
+var filter_message_type_pipe_1 = require('./common/pipes/filter.message.type.pipe');
+var truncate_string_pipe_1 = require('./common/pipes/truncate.string.pipe');
 var AppModule = (function () {
     function AppModule() {
     }
@@ -48,7 +50,9 @@ var AppModule = (function () {
                 filter_component_1.FilterComponent,
                 filter_form_component_1.FilterFormComponent,
                 request_condition_editor_1.RequestConditionEditorComponent,
-                response_condition_editor_1.ResponseConditionEditorComponent
+                response_condition_editor_1.ResponseConditionEditorComponent,
+                filter_message_type_pipe_1.FilterMessageTypePipe,
+                truncate_string_pipe_1.TruncateStringPipe
             ],
             imports: [
                 platform_browser_1.BrowserModule,

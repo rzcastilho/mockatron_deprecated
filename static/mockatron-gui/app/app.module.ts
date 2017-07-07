@@ -21,6 +21,9 @@ import {FilterFormComponent} from './admin/filter/components/filter.form.compone
 import {RequestConditionEditorComponent} from './admin/request_condition/components/request.condition.editor';
 import {ResponseConditionEditorComponent} from './admin/response_condition/components/response.condition.editor';
 
+import {FilterMessageTypePipe} from './common/pipes/filter.message.type.pipe';
+import {TruncateStringPipe} from './common/pipes/truncate.string.pipe';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +40,9 @@ import {ResponseConditionEditorComponent} from './admin/response_condition/compo
     FilterComponent,
     FilterFormComponent,
     RequestConditionEditorComponent,
-    ResponseConditionEditorComponent
+    ResponseConditionEditorComponent,
+    FilterMessageTypePipe,
+    TruncateStringPipe
   ],
   imports: [
     BrowserModule,

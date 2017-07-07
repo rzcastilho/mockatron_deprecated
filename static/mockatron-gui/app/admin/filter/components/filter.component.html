@@ -16,11 +16,11 @@
     </td>
     <td>{{filter.label}}</td>
     <td class="text-center">
-      <kbd *ngIf="filter.request_conditions.length == 0">None</kbd>
+      <kbd *ngIf="filter.request_conditions.length == 0" href="#" data-toggle="modal" [attr.data-target]="'#requestConditions' + filter.id">None</kbd>
       <a *ngIf="filter.request_conditions.length > 0" href="#" data-toggle="modal" [attr.data-target]="'#requestConditions' + filter.id"><span class="label label-primary">{{filter.request_conditions.length}}</span></a>
     </td>
     <td class="text-center">
-      <kbd *ngIf="filter.response_conditions.length == 0">None</kbd>
+      <kbd *ngIf="filter.response_conditions.length == 0" href="#" data-toggle="modal" [attr.data-target]="'#responseConditions' + filter.id">None</kbd>
       <a *ngIf="filter.response_conditions.length > 0" href="#" data-toggle="modal" [attr.data-target]="'#responseConditions' + filter.id"><span class="label label-primary">{{filter.response_conditions.length}}</span></a>
     </td>
     <td class="text-center"><span class="label label-info">{{filter.priority}}</span></td>

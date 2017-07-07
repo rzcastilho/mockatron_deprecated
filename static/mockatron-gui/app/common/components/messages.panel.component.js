@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var message_type_1 = require('../models/message.type');
-var filter_message_type_pipe_1 = require('../pipes/filter.message.type.pipe');
 var message_service_1 = require('../services/message.service');
 var MessagesPanelComponent = (function () {
     function MessagesPanelComponent(_messageService) {
@@ -28,7 +27,6 @@ var MessagesPanelComponent = (function () {
     MessagesPanelComponent = __decorate([
         core_1.Component({
             selector: 'messages-panel',
-            pipes: [filter_message_type_pipe_1.FilterMessageTypePipe],
             template: "\n    <div class=\"alert alert-success\" role=\"alert\" *ngIf=\"existsMessageType(messageType.Success)\">\n      <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"dismissMessages(messageType.Success)\"><span aria-hidden=\"true\">&times;</span></button>\n      <blockquote *ngFor=\"let message of messages | filterMessageType:messageType.Success\">\n        <p>{{message.message}}</p>\n        <footer *ngIf=\"message.detail\">{{message.detail}}</footer>\n      </blockquote>\n    </div>\n    <div class=\"alert alert-warning\" role=\"alert\" *ngIf=\"existsMessageType(messageType.Warning)\">\n      <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"dismissMessages(messageType.Warning)\"><span aria-hidden=\"true\">&times;</span></button>\n      <blockquote *ngFor=\"let message of messages | filterMessageType:messageType.Warning\">\n        <p>{{message.message}}</p>\n        <footer *ngIf=\"message.detail\">{{message.detail}}</footer>\n      </blockquote>\n    </div>\n    <div class=\"alert alert-danger\" role=\"alert\" *ngIf=\"existsMessageType(messageType.Error)\">\n      <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"dismissMessages(messageType.Error)\"><span aria-hidden=\"true\">&times;</span></button>\n      <blockquote *ngFor=\"let message of messages | filterMessageType:messageType.Error\">\n        <p>{{message.message}}</p>\n        <footer *ngIf=\"message.detail\">{{message.detail}}</footer>\n      </blockquote>\n    </div>\n  "
         }), 
         __metadata('design:paramtypes', [message_service_1.MessageService])

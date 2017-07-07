@@ -20,8 +20,8 @@ services:
   proxy:
     image: nginx
     volumes:
+      - ${PWD}/nginx/log:/var/log/nginx
       - ${PWD}/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ${PWD}/nginx/favicon.ico:/etc/nginx/favicon.ico
       - ${PWD}/nginx/mockatron.conf:/etc/nginx/mockatron.conf
       - ${PWD}/nginx/conf.d:/etc/nginx/conf.d
       - ${PWD}/static:/usr/share/nginx/html
@@ -30,5 +30,6 @@ services:
       - "8001:8001"
       - "7080:7080"
       - "8080:8080"
+      - "8003:8003"
     depends_on:
       - web

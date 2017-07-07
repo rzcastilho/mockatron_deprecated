@@ -69,6 +69,7 @@ RESPONSE_FIELD_TYPES = (
 
 REQUEST_CONDITION_OPERATORS = (
     ('EQUALS', 'Equals'),
+    ('NOTEQUALS', 'Not Equals'),
     ('CONTAINS', 'Contains'),
     ('STARTSWITH', 'Starts With'),
     ('ENDSWITH', 'Ends With'),

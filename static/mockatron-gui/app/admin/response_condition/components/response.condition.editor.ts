@@ -1,10 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ResponseConditionService} from '../services/response.condition.service';
-import {TruncateStringPipe} from '../../../common/pipes/truncate.string.pipe';
 
 @Component({
   selector: 'response-condition-editor',
-  pipes: [TruncateStringPipe],
   templateUrl: 'app/admin/response_condition/components/response.condition.editor.html'
 })
 export class ResponseConditionEditorComponent {

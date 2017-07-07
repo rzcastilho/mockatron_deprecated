@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
-var truncate_string_pipe_1 = require('../../../common/pipes/truncate.string.pipe');
 var operation_service_1 = require('../services/operation.service');
 var message_service_1 = require('../../../common/services/message.service');
 var OperationComponent = (function () {
@@ -50,7 +49,6 @@ var OperationComponent = (function () {
     OperationComponent = __decorate([
         core_1.Component({
             selector: 'operation',
-            pipes: [truncate_string_pipe_1.TruncateStringPipe],
             templateUrl: 'app/admin/operation/components/operation.component.html'
         }), 
         __metadata('design:paramtypes', [operation_service_1.OperationService, router_1.ActivatedRoute, message_service_1.MessageService])
