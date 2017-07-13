@@ -1,18 +1,30 @@
 # Mockatron
-Just a Mock Server
 
-**Prepare**
+A Simple Mock Server
 
-Create database schema
+### Prepare
 
-`$ docker-compose run web python manage.py makemigrations mockatron_core`
+**Create database schema**
 
-`$ docker-compose run web python manage.py migrate`
+```shell
+$ docker-compose run web python manage.py makemigrations mockatron_core
+$ docker-compose run web python manage.py migrate
+```
 
-Add user admin
+**Add admin user**
 
-`$ docker-compose run web python manage.py createsuperuser`
+```shell
+$ docker-compose run web python manage.py createsuperuser
+```
 
-**Run**
+### Run
 
-`$ docker-compose up`
+```shell
+$ docker-compose up
+```
+
+### Configuration
+
+[DJango UI - http://localhost:8000/mockatron/admin/](http://localhost:8000/mockatron/admin/)
+
+[AngularJS UI - http://localhost/mockatron-gui/](http://localhost/mockatron-gui/)
