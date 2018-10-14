@@ -13,7 +13,10 @@ logger = logging.getLogger("django")
 
 def extract_agent_data_from_request(request):
     result = {}
-    result['protocol'] = request.scheme
+    if "HTTP_X_FORWARDED_PROTO" in request.META:
+        result['protocol'] = request.META["HTTP_X_FORWARDED_PROTO"]
+    else:
+        result['protocol'] = request.scheme
     logger.info(request.META)
     if 'HTTP_X_MOCKATRON_ORIGINAL_HOST' in request.META:
         result['host'] = request.META["HTTP_X_MOCKATRON_ORIGINAL_HOST"].split(":")[0]

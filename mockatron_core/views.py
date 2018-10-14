@@ -21,6 +21,7 @@ def process(request):
         else:
             logger.debug("Content type not equals to %s, find agent on database...", CONTENT_TYPE_JSON)
             agent = Agent.objects.get(protocol=agent_data['protocol'], host=agent_data['host'], port=agent_data['port'], path=agent_data['path'], method=agent_data['method'])
+        logger.info(agent)
         if agent.content_type == None and agent_data['content_type'] != None:
             logger.debug("Agent content type is none and request content type isn't none, than agent content type is updated...")
             agent.content_type = agent_data['content_type']
