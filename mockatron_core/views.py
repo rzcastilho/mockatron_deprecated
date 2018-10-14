@@ -13,6 +13,7 @@ logger = logging.getLogger("django")
 def process(request):
     logger.debug("Starting request process...")
     agent_data = extract_agent_data_from_request(request)
+    logger.info(agent_data)
     try:
         if agent_data['content_type'] == CONTENT_TYPE_JSON:
             logger.debug("Content type equals to %s, call json agent locator...", CONTENT_TYPE_JSON)
