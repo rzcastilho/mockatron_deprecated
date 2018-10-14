@@ -23,7 +23,10 @@ def extract_agent_data_from_request(request):
         result['port'] = request.META["HTTP_X_MOCKATRON_ORIGINAL_HOST"].split(":")[1]
     else:
         result['host'] = request.META["HTTP_HOST"].split(":")[0]
-        result['port'] = request.META["SERVER_PORT"]
+        if 'HTTP_X_FORWARDED_PORT' in request.META:
+            result['port'] = request.META["HTTP_X_FORWARDED_PORT"]
+        else:
+            result['port'] = request.META["SERVER_PORT"]
     result['path'] = request.path
     result['method'] = request.method
     result['content_type'] = request.META["CONTENT_TYPE"]
