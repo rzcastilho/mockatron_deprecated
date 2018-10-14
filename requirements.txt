@@ -2,7 +2,11 @@ Django==1.9.8
 django-filter==0.13.0
 djangorestframework==3.4.0
 Markdown==2.6.6
-psycopg2==2.6.2
-python-memcached==1.58
+psycopg2==2.7.5
 six==1.10.0
 xmltodict==0.10.2
+dj-database-url==0.5.0
+django-bmemcached==0.2.3
+python-binary-memcached==0.28.0
+typing==3.6.6
+uhashring==1.1
