@@ -79,8 +79,10 @@ WSGI_APPLICATION = 'mockatron.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+ssl_require = True if os.environ.get('DATABASE_SSL_REQUIRE') else False
+
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
+    'default': dj_database_url.config(conn_max_age=600, ssl_require=ssl_require)
 }
 
 # Cache

@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
+    url(r'^favicon.ico$', RedirectView.as_view(url=staticfiles_storage.url('static/favicon.ico'), permanent=False), name="favicon"),
     url(r'^mockatron/admin/', admin.site.urls),
     url(r'^mockatron/api/', include('mockatron_api.urls')),
     url(r'^', include('mockatron_core.urls'))

@@ -14,6 +14,11 @@ services:
       - '${PWD}/hosts:/etc/hosts:ro'
     ports:
       - '8000:8000'
+    environment:
+      - 'DATABASE_URL=postgres://postgres@db:5432/postgres'
+      - 'MEMCACHEDCLOUD_PASSWORD='
+      - 'MEMCACHEDCLOUD_SERVERS=cache:11211'
+      - 'MEMCACHEDCLOUD_USERNAME='
     depends_on:
       - db
       - cache
